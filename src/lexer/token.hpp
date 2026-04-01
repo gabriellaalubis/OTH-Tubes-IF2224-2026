@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include <string>
+using namespace std;
 
 enum TokenType {
     INTCON, REALCON, CHARCON, STRING, 
@@ -10,18 +11,18 @@ enum TokenType {
     LPARENT, RPARENT, LBRACK, RBRACK, COMMA, SEMICOLON, PERIOD, COLON,
     BECOMES, CONSTSY, TYPESY, VARSY, FUNCTIONSY, PROCEDURESY,
     ARRAYSY, RECORDSY, PROGRAMSY, IDENT, BEGINSY, 
-    IFSY, CASESY, REPREATSY, WHILESY, FORSY, ENDSY, ELSESY, UNTILSY,
+    IFSY, CASESY, REPEATSY, WHILESY, FORSY, ENDSY, ELSESY, UNTILSY,
     OFSY, DOSY, TOSY, DOWNTOSY, THENSY, COMMENT,
     UNKNOWN, EOF_TOKEN
 };
 
 struct Token{
     TokenType type;
-    std::string value;
+    string value;
     int line;
     int col;
 };
 
-std::string tokenTypetoString(TokenType type);
+string tokenTypetoString(TokenType type);
 
 #endif
