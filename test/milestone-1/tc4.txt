@@ -1,0 +1,32 @@
+program ControlFlow;
+var
+  i, n: integer;
+begin
+  { contoh if-else }
+  if n > 0 then
+    writeln('positif')
+  else
+    writeln('non-positif');
+
+  { contoh while }
+  i := 1;
+  while i <= 10 do
+  begin
+    i := i + 1;
+  end;
+
+  { contoh for }
+  for i := 1 to 5 do
+    writeln(i);
+
+  { contoh repeat-until }
+  repeat
+    i := i - 1;
+  until i == 0;
+
+  { contoh case }
+  case i of
+    1: writeln('satu');
+    2: writeln('dua');
+  end;
+end.

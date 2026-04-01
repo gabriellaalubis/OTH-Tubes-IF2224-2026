@@ -1,0 +1,17 @@
+program DataTypes;
+const
+  PI := 3.14;
+  MAX := 100;
+  GRADE := 'A';
+  MSG := 'Hello World';
+var
+  x: real;
+  n: integer;
+  c: char;
+  s: string;
+begin
+  x := +26.7;
+  n := -42;
+  c := 'z';
+  s := 'IRK';
+end.

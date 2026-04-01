@@ -1,0 +1,22 @@
+program ErrorTest;
+var
+  x: integer;
+begin
+  x := 5;
+
+  { karakter tidak dikenal }
+  x := x @ 2;
+  x := x # 1;
+
+  { string tidak ditutup }
+  writeln('ini string tidak ditutup);
+
+  { komentar tidak ditutup
+  x := 10;
+
+  { penggunaan = tunggal (bukan == atau :=) }
+  x = 5;
+
+  { angka diikuti huruf langsung - ident terpisah }
+  x := 3abc;
+end.

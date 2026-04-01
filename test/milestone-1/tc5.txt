@@ -1,0 +1,29 @@
+program Structures;
+type
+  Point = record
+    x: integer;
+    y: integer;
+  end;
+  Arr = array [1..10] of integer;
+
+function tambah(a, b: integer): integer;
+begin
+  tambah := a + b;
+end;
+
+procedure cetakHasil(hasil: integer);
+begin
+  writeln(hasil);
+end;
+
+var
+  p: Point;
+  data: Arr;
+  res: integer;
+begin
+  p.x := 3;
+  p.y := 4;
+  data[1] := 99;
+  res := tambah(p.x, p.y);
+  cetakHasil(res);
+end.

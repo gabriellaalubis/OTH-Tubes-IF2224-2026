@@ -1,0 +1,15 @@
+{ Ini adalah komentar satu baris }
+program KomentarTest;
+(* Ini komentar gaya Pascal lama *)
+var
+  NamaVariabel: INTEGER; { tipe case-insensitive }
+  HASIL: Real;
+begin
+  (* komentar
+     multi baris
+     dengan (* nested bukan didukung *) tapi ini tetap valid *)
+  NamaVariabel := 7;
+  HASIL := NamaVariabel / 2;
+  { komentar di tengah kode }
+  WRITELN(HASIL); { writeln juga ident, case-insensitive }
+end.

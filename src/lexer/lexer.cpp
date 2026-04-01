@@ -236,7 +236,7 @@ Token Lexer::nextToken() {
                 state = S_INT_NEG_DOT;
             } else {
                 setPending(c);
-                return {INTCON, "-" + buffer, tokLine, tokCol};
+                return {INTCON, buffer, tokLine, tokCol};
             }
             break;
         }
@@ -249,7 +249,7 @@ Token Lexer::nextToken() {
             } else {
                 setPending(c);
                 tokenQueue.push({PERIOD, "", tokLine, tokCol});
-                return {INTCON, "-" + buffer, tokLine, tokCol};
+                return {INTCON, buffer, tokLine, tokCol};
             }
             break;
         }
@@ -259,7 +259,7 @@ Token Lexer::nextToken() {
                 buffer += c;
             } else {
                 setPending(c);
-                return {REALCON, "-" + buffer, tokLine, tokCol};
+                return {REALCON, buffer, tokLine, tokCol};
             }
             break;
         }

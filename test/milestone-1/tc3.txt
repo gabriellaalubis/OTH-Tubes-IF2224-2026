@@ -1,0 +1,23 @@
+program Operators;
+var
+  a, b, hasil: integer;
+  flag: boolean;
+begin
+  a := 20;
+  b := 3;
+  hasil := a + b;
+  hasil := a - b;
+  hasil := a * b;
+  hasil := a div b;
+  hasil := a mod b;
+  hasil := a / b;
+  flag := (a == b);
+  flag := (a <> b);
+  flag := (a > b);
+  flag := (a >= b);
+  flag := (a < b);
+  flag := (a <= b);
+  flag := (flag and true);
+  flag := (flag or false);
+  flag := not flag;
+end.
