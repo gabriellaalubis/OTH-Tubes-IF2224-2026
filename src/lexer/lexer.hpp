@@ -71,6 +71,8 @@ private:
     static bool isLetter(char c);
     static bool isDigit(char c);
     static bool isWhitespace(char c);
+    std::string readUntilLineEndOrEOF();
+    std::string trim(const std::string& s);
 
     static TokenType classifyIdent(const std::string& buf);
 };
