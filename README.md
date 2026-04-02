@@ -31,13 +31,6 @@ Arion Lexical Analyzer adalah sebuah program yang mengimplementasikan **Determin
 ### Clone repository
 ```bash
 git clone https://github.com/gabriellaalubis/OTH-Tubes-IF2224-2026
-
-# Masuk ke direktori proyek
-cd OTH-Tubes-IF2224-2026
-
-make
-
-make run
 ```
 
 ### Masuk ke direktori proyek
