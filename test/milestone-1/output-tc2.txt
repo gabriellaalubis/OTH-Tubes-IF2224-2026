@@ -18,6 +18,14 @@ ident(MSG)
 becomes
 string(Hello World)
 semicolon
+ident(MSG2)
+becomes
+string(Hello 'World')
+semicolon
+ident(EMPTYSTR)
+becomes
+string()
+semicolon
 varsy
 ident(x)
 colon
@@ -28,6 +36,10 @@ colon
 ident(integer)
 semicolon
 ident(c)
+colon
+ident(char)
+semicolon
+ident(c2)
 colon
 ident(char)
 semicolon
@@ -47,7 +59,11 @@ intcon(-42)
 semicolon
 ident(c)
 becomes
-charcon(z)
+charcon(c)
+semicolon
+ident(c2)
+becomes
+charcon(')
 semicolon
 ident(s)
 becomes

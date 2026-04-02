@@ -1,15 +1,16 @@
-{ Ini adalah komentar satu baris }
+{ komentar kurung kurawal }
+(* komentar kurung bintang *)
+{ komentar kurung buka dan tutup berbeda *)
 program KomentarTest;
-(* Ini komentar gaya Pascal lama *)
 var
-  NamaVariabel: INTEGER; { tipe case-insensitive }
+  NamaVariabel: INTEGER; 
   HASIL: Real;
 begin
   (* komentar
-     multi baris
-     dengan (* nested bukan didukung *) tapi ini tetap valid *)
+     multi 
+     baris (* ini masih masuk *) ini tidak *)
   NamaVariabel := 7;
   HASIL := NamaVariabel / 2;
   { komentar di tengah kode }
-  WRITELN(HASIL); { writeln juga ident, case-insensitive }
+  WRITELN(HASIL); 
 end.

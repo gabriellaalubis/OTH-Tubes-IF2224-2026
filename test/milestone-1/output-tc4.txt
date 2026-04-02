@@ -9,6 +9,7 @@ colon
 ident(integer)
 semicolon
 beginsy
+comment(contoh if-else)
 ifsy
 ident(n)
 gtr
@@ -24,6 +25,7 @@ lparent
 string(non-positif)
 rparent
 semicolon
+comment(contoh while)
 ident(i)
 becomes
 intcon(1)
@@ -42,6 +44,7 @@ intcon(1)
 semicolon
 endsy
 semicolon
+comment(contoh for)
 forsy
 ident(i)
 becomes
@@ -54,6 +57,7 @@ lparent
 ident(i)
 rparent
 semicolon
+comment(contoh repeat-until)
 repeatsy
 ident(i)
 becomes
@@ -66,6 +70,7 @@ ident(i)
 eql
 intcon(0)
 semicolon
+comment(contoh case)
 casesy
 ident(i)
 ofsy

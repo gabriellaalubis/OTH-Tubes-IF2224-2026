@@ -1,0 +1,41 @@
+comment(komentar kurung kurawal)
+comment(komentar kurung bintang)
+comment(komentar kurung buka dan tutup berbeda)
+programsy
+ident(KomentarTest)
+semicolon
+varsy
+ident(NamaVariabel)
+colon
+ident(INTEGER)
+semicolon
+ident(HASIL)
+colon
+ident(Real)
+semicolon
+beginsy
+comment(komentar
+     multi 
+     baris (* ini masih masuk)
+ident(ini)
+ident(tidak)
+times
+rparent
+ident(NamaVariabel)
+becomes
+intcon(7)
+semicolon
+ident(HASIL)
+becomes
+ident(NamaVariabel)
+rdiv
+intcon(2)
+semicolon
+comment(komentar di tengah kode)
+ident(WRITELN)
+lparent
+ident(HASIL)
+rparent
+semicolon
+endsy
+period

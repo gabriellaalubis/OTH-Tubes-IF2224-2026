@@ -4,14 +4,18 @@ const
   MAX := 100;
   GRADE := 'A';
   MSG := 'Hello World';
+  MSG2 := 'Hello ''World''';
+  EMPTYSTR := '';
 var
   x: real;
   n: integer;
   c: char;
+  c2: char;
   s: string;
 begin
   x := +26.7;
   n := -42;
-  c := 'z';
+  c := 'c';
+  c2 := '''';
   s := 'IRK';
 end.

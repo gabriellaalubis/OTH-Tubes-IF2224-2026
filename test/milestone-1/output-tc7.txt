@@ -11,6 +11,7 @@ ident(x)
 becomes
 intcon(5)
 semicolon
+comment(karakter tidak dikenal)
 ident(x)
 becomes
 ident(x)
@@ -23,13 +24,19 @@ ident(x)
 unknown(#)
 intcon(1)
 semicolon
+comment(string tidak ditutup)
 ident(writeln)
 lparent
-unknown('ini string tidak ditutup);)
+unknown('ini string tidak ditutup);)
+comment(komentar tidak ditutup
+  x := 10;
+
+  { penggunaan = tunggal (bukan == atau :=))
 ident(x)
 unknown(=)
 intcon(5)
 semicolon
+comment(angka diikuti huruf langsung - ident terpisah)
 ident(x)
 becomes
 intcon(3)
