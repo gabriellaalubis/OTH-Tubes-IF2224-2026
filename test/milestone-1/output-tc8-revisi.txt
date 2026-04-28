@@ -1,0 +1,10 @@
+ident(katasambung)
+ident(kata)
+ident(pisah)
+becomes
+ident(kata)
+realcon(1.23)
+ident(ident)
+becomes
+intcon(1)
+unknown(.23.e-+/1.e-+/1)

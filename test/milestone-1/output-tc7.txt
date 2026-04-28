@@ -27,7 +27,7 @@ semicolon
 comment(string tidak ditutup)
 ident(writeln)
 lparent
-unknown('ini string tidak ditutup);)
+unknown('ini string tidak ditutup);)
 comment(komentar tidak ditutup
   x := 10;
 

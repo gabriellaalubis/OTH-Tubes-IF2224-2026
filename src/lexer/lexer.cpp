@@ -115,6 +115,23 @@ std::string Lexer::trim(const std::string& s) {
     return s.substr(l, r - l);
 }
 
+Token Lexer::consumeUnknown(std::string& buffer, int tokLine, int tokCol) {
+    while (true) {
+        char nc = readChar();
+        if (nc == (char)EOF || isWhitespace(nc)) {
+            if (isWhitespace(nc)) setPending(nc);
+            break;
+        }
+        if (nc == ';' || nc == ',' || nc == '(' || nc == ')' ||
+            nc == '[' || nc == ']' || nc == '\'' || nc == '{') {
+            setPending(nc);
+            break;
+        }
+        buffer += nc;
+    }
+    return {UNKNOWN, buffer, tokLine, tokCol};
+}
+
 std::string Lexer::formatToken(const Token& tok) {
     std::string name = tokenTypetoString(tok.type);
     bool isLiteral = (tok.type == STRING || tok.type == CHARCON ||
@@ -235,7 +252,20 @@ Token Lexer::nextToken() {
             if (c == ']') return {RBRACK,    "", tokLine, tokCol};
             if (c == ',') return {COMMA,     "", tokLine, tokCol};
             if (c == ';') return {SEMICOLON, "", tokLine, tokCol};
-            if (c == '.') return {PERIOD,    "", tokLine, tokCol};
+            if (c == '.') {
+                char nc = readChar();
+                if (nc == (char)EOF || isWhitespace(nc)) {
+                    if (isWhitespace(nc)) setPending(nc);
+                    return {PERIOD, "", tokLine, tokCol};
+                }
+                if (nc == '.') {
+                    setPending(nc);
+                    return {PERIOD, "", tokLine, tokCol};
+                }
+                std::string buf = ".";
+                buf += nc;
+                return consumeUnknown(buf, tokLine, tokCol);
+            }
 
             // Karakter ga dikenal
             return {UNKNOWN, std::string(1, c), tokLine, tokCol};

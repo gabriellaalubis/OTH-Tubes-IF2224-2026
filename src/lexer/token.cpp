@@ -61,7 +61,7 @@ string tokenTypetoString(TokenType type){
         case CONSTSY:
             return "constsy";
         case TYPESY:
-            return "sypesy";
+            return "typesy";   
         case VARSY:
             return "varsy";
         case FUNCTIONSY:

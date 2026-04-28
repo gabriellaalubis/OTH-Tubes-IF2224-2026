@@ -18,7 +18,7 @@ $(TARGET): $(SRCS)
 # ─── Hapus hasil build ──────────────────────────────────────
 clean:
 	rm -f $(TARGET)
-	@echo "Build artifacts dihapus."
+	@echo "Build dihapus."
 
 # ─── Jalankan program ───────────────────────────────────────
 run: all

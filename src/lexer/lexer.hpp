@@ -73,6 +73,7 @@ private:
     static bool isWhitespace(char c);
     std::string readUntilLineEndOrEOF();
     std::string trim(const std::string& s);
+    Token consumeUnknown(std::string& buffer, int tokLine, int tokCol);
 
     static TokenType classifyIdent(const std::string& buf);
 };
