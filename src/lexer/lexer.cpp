@@ -60,6 +60,17 @@ bool Lexer::isEOF() const {
     return !hasPending && (!inputFile.good() || inputFile.eof());
 }
 
+vector<Token> Lexer::tokenizeAll() {
+    vector<Token> tokens;
+    while (true) {
+        Token tok = nextToken();
+        if (tok.type == EOF_TOKEN) break;
+        if (tok.type == COMMENT) continue;
+        tokens.push_back(tok);
+    }
+    return tokens;
+}
+
 char Lexer::readChar() {
     char c;
 
