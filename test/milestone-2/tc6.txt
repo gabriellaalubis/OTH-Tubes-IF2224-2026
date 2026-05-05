@@ -1,0 +1,14 @@
+program RecordTest;
+type
+  Point == record
+    x: integer;
+    y: integer
+  end;
+var
+  p: Point;
+  arr: array[1 .. 5] of integer;
+begin
+  arr[1] := 10;
+  arr[2] := arr[1] + 20;
+  arr[3] := arr[1] + arr[2]
+end.

@@ -1,0 +1,15 @@
+program TypeTest;
+const
+  MAX == 10;
+var
+  n: integer;
+type
+  Season == (Spring, Summer, Fall, Winter);
+procedure printNum(n: integer);
+begin
+  writeln(n);
+end;
+begin
+  n := MAX;
+  printNum(n);
+end.

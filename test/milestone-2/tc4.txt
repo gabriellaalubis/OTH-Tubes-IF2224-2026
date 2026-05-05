@@ -1,0 +1,12 @@
+program ControlFlow;
+var
+  i, x: integer;
+begin
+  while i < 10 do
+    i := i + 1;
+  for i := 1 to 5 do
+    x := x * i;
+  repeat
+    x := x - 1;
+  until x == 0;
+end.

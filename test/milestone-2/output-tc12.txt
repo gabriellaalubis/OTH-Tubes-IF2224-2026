@@ -1,0 +1,1 @@
+Syntax error at line 4: expected 'to' or 'downto' in for-statement, got 'intcon'

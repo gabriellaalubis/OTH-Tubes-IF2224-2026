@@ -74,7 +74,7 @@ private:
     NodePtr parseParameterList();
 
     NodePtr parseVariable();         
-    NodePtr parseComponentVariable(NodePtr baseVar); 
+    NodePtr parseComponentVariable(); 
     NodePtr parseIdentifierList();
     NodePtr parseIndexList();
 

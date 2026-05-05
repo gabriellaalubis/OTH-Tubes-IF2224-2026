@@ -477,52 +477,30 @@ NodePtr Parser::parseAssignmentStatement(NodePtr varNode) {
 
 NodePtr Parser::parseVariable() {
     auto node = std::make_shared<ParseNode>("<variable>");
-
-    NodePtr identLeaf = expect(IDENT);
-
-    if (check(LBRACK) || check(PERIOD)) {
-
-        auto baseVar = std::make_shared<ParseNode>("<variable>");
-        baseVar->children.push_back(identLeaf);
-
-
-        node->children.push_back(parseComponentVariable(baseVar));
-    } else {
-
-        node->children.push_back(identLeaf);
+ 
+    node->children.push_back(expect(IDENT));
+ 
+    while (check(LBRACK) || check(PERIOD)) {
+        node->children.push_back(parseComponentVariable());
     }
-
+ 
     return node;
 }
 
 
-NodePtr Parser::parseComponentVariable(NodePtr baseVar) {
-    NodePtr currentBase = baseVar;
+NodePtr Parser::parseComponentVariable() {
+    auto node = std::make_shared<ParseNode>("<component-variable>");
 
-    while (check(LBRACK) || check(PERIOD)) {
-        auto compNode = std::make_shared<ParseNode>("<component-variable>");
-        compNode->children.push_back(currentBase); 
-
-        if (check(LBRACK)) {
-            compNode->children.push_back(consume()); 
-            compNode->children.push_back(parseIndexList());
-            compNode->children.push_back(expect(RBRACK));
-        } else { 
-            compNode->children.push_back(consume()); 
-            compNode->children.push_back(expect(IDENT)); 
-        }
-
-
-        if (check(LBRACK) || check(PERIOD)) {
-            
-            auto wrapVar = std::make_shared<ParseNode>("<variable>");
-            wrapVar->children.push_back(compNode);
-            currentBase = wrapVar;
-        } else {
-            return compNode;
-        }
+    if (check(LBRACK)) {
+        node->children.push_back(consume());
+        node->children.push_back(parseIndexList());
+        node->children.push_back(expect(RBRACK));  
+    } else if (check(PERIOD)) {
+        node->children.push_back(consume());
+        node->children.push_back(expect(IDENT));   
     }
-    return currentBase;
+
+    return node;
 }
 
 

@@ -1,0 +1,1 @@
+Syntax error at line 6 col 3: unexpected token 'ident(x)', expected 'endsy'

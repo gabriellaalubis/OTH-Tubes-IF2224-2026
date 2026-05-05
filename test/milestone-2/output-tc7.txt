@@ -1,0 +1,1 @@
+Syntax error at line 6: declaration order violation — 'typesy' appears out of order (required order: const, type, var, subprogram)
