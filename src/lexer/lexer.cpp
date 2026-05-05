@@ -346,6 +346,10 @@ Token Lexer::nextToken() {
                 buffer += '.';
                 buffer += c;
                 state = S_REAL;
+            } else if (c == '.') {
+                tokenQueue.push({PERIOD, "", tokLine, tokCol});
+                tokenQueue.push({PERIOD, "", tokLine, tokCol});
+                return {INTCON, buffer, tokLine, tokCol};
             } else {
                 setPending(c);
                 tokenQueue.push({PERIOD, "", tokLine, tokCol});

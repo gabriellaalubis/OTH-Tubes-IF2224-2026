@@ -4,7 +4,8 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
 # Semua source file
 SRCS = src/main.cpp \
        src/lexer/lexer.cpp \
-       src/lexer/token.cpp
+       src/lexer/token.cpp \
+	   src/parser/parser.cpp
 
 TARGET = arion
 
