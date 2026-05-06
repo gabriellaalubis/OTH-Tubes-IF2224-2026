@@ -78,14 +78,11 @@ int main(int argc, char* argv[]) {
                 break;
             }
             
-            if (tok.type == COMMENT) continue;
-
             std::string formatted = Lexer::formatToken(tok);
-
             std::cout << formatted << std::endl;
-
             // outFile << formatted << std::endl;
 
+            if (tok.type == COMMENT) continue;
             tokens.push_back(tok);
             tokenCount++;
         }

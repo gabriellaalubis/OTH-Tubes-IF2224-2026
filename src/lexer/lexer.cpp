@@ -273,6 +273,10 @@ Token Lexer::nextToken() {
                     setPending(nc);
                     return {PERIOD, "", tokLine, tokCol};
                 }
+                if (isLetter(nc) || isDigit(nc)) {
+                    setPending(nc);
+                    return {PERIOD, "", tokLine, tokCol};
+                }
                 std::string buf = ".";
                 buf += nc;
                 return consumeUnknown(buf, tokLine, tokCol);
