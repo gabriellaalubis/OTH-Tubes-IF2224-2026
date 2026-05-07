@@ -1,4 +1,6 @@
-# Arion Compiler<br> Milestone 1 - Lexical Analysis
+# Arion Compiler
+Milestone 1 - Lexical Analysis  
+Milestone 2 - Syntax Analysis (Parse Tree)
 
 ## Identitas Kelompok
 
@@ -11,13 +13,34 @@ Reva Natania Sitohang - 13524098
 
 ## Deskripsi Program
 
-Arion Lexical Analyzer adalah sebuah program yang mengimplementasikan **Deterministic Finite Automata (DFA)** untuk melakukan analisis leksikal pada bahasa pemrograman Arion. Program ini merupakan tahap pertama dalam proses kompilasi/interpretasi bahasa pemrograman.
+Arion Compiler adalah program untuk menganalisis kode sumber bahasa Arion dalam dua tahap:
+1. **Lexical Analysis (Milestone 1)** menggunakan **Deterministic Finite Automata (DFA)** untuk menghasilkan token.
+2. **Syntax Analysis (Milestone 2)** menggunakan **recursive-descent parser** untuk membangun parse tree dan memvalidasi struktur program.
 
-### Fitur Utama
+### Fitur Utama Milestone 1 (Lexer)
 
 1. Membaca source code dalam bahasa pemrograman Arion dari file input (.txt)
 2. Menganalisis setiap karakter dan mengidentifikasi token-token sesuai dengan DFA yang telah dirancang
 3. Menghasilkan daftar token dalam format output (.txt) yang detail
+
+### Fitur Utama Milestone 2 (Parser)
+
+1. Menerima hasil tokenisasi dari lexer (komentar diabaikan untuk parsing).
+2. Melakukan parsing program Arion dan membangun **parse tree**.
+3. Menulis hasil parse tree ke file `test/milestone-2/output-<nama-file>.txt`.
+4. Menangani syntax error dengan pesan yang informatif (line/col dan token yang diharapkan).
+5. Memvalidasi urutan deklarasi (`const -> type -> var -> subprogram`).
+
+### Cakupan Grammar Milestone 2
+
+Parser menangani konstruksi utama berikut:
+- `program ... ; ... begin ... end .`
+- Deklarasi `const`, `type`, `var`
+- Tipe: identifier, `array`, `record`, `enumerated`, `range`
+- Subprogram: `procedure`, `function`, formal parameter
+- Statement: assignment, procedure/function call, compound statement
+- Control flow: `if`, `case`, `while`, `repeat-until`, `for ... to/downto`
+- Ekspresi: relational, additive, multiplicative, unary (`+`, `-`, `not`)
 
 ## Requirements
 
@@ -60,41 +83,54 @@ make run
 
 1. **Program akan menampilkan:**
    ```
-   ARION LEXICAL ANALYZER
+   ARION COMPILER
    Masukkan path file input (.txt): 
    ```
 
 2. **Masukkan path file input**, contoh:
    ```
-   test/milestone-1/tc1.txt
+   test/milestone-2/tc1.txt
    ```
 
 3. **Tekan Enter** dan program akan:
    - Membaca file input
-   - Melakukan analisis leksikal
-   - Menghasilkan file output di `test/milestone-1/output-<nama-file>.txt`
+   - Menampilkan **hasil lexical analysis di terminal**
+   - Menampilkan **parse tree di terminal**
+   - Menyimpan **hanya parse tree** ke file `test/milestone-2/output-<nama-file>.txt`
+   - **Notes: Pada Milestone 2, lexical analysis tidak disimpan ke file output**
+
+## Testing Milestone 2
+
+Folder test yang tersedia:
+- `test/milestone-2/tc1.txt` sampai `test/milestone-2/tc12.txt`
+- Referensi output: `test/milestone-2/output-tc1.txt` sampai `output-tc12.txt`
+
+Ringkasan:
+- **Kasus valid (parse tree terbentuk):** `tc1` s.d. `tc6`
+- **Kasus error sintaks (pesan error):** `tc7` s.d. `tc12`
 
 
-## Pembagian Tugas
+## Pembagian Tugas (Milestone 2)
 
 **Gabriella Botimada Lubis - 13524006**
-- Perancangan DFA
-- Implementasi Kode
-- Pengujian
+- Implementasi Kode Parser
+- Testing
+- Bug Fixing
 - Penyusunan Laporan
+
 
 \
 **Stefani Angeline Oroh - 13524064** 
-- Perancangan DFA
-- Implementasi Kode
-- Pengujian
+- Implementasi Kode Parser
+- Testing
+- Bug Fixing
 - Penyusunan Laporan
 
 \
 **Reva Natania Sitohang - 13524098**
-- Perancangan DFA
-- Implementasi Kode
-- Pengujian
+- Implementasi Kode Parser
+- Testing
+- Bug Fixing
 - Penyusunan Laporan
 
 
