@@ -60,6 +60,17 @@ bool Lexer::isEOF() const {
     return !hasPending && (!inputFile.good() || inputFile.eof());
 }
 
+vector<Token> Lexer::tokenizeAll() {
+    vector<Token> tokens;
+    while (true) {
+        Token tok = nextToken();
+        if (tok.type == EOF_TOKEN) break;
+        if (tok.type == COMMENT) continue;
+        tokens.push_back(tok);
+    }
+    return tokens;
+}
+
 char Lexer::readChar() {
     char c;
 
@@ -262,6 +273,10 @@ Token Lexer::nextToken() {
                     setPending(nc);
                     return {PERIOD, "", tokLine, tokCol};
                 }
+                if (isLetter(nc) || isDigit(nc)) {
+                    setPending(nc);
+                    return {PERIOD, "", tokLine, tokCol};
+                }
                 std::string buf = ".";
                 buf += nc;
                 return consumeUnknown(buf, tokLine, tokCol);
@@ -335,6 +350,10 @@ Token Lexer::nextToken() {
                 buffer += '.';
                 buffer += c;
                 state = S_REAL;
+            } else if (c == '.') {
+                tokenQueue.push({PERIOD, "", tokLine, tokCol});
+                tokenQueue.push({PERIOD, "", tokLine, tokCol});
+                return {INTCON, buffer, tokLine, tokCol};
             } else {
                 setPending(c);
                 tokenQueue.push({PERIOD, "", tokLine, tokCol});

@@ -1,0 +1,6 @@
+program ErrorTest;
+procedure foo(x: integer;);
+begin
+end;
+begin
+end.

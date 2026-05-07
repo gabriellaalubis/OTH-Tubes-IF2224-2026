@@ -1,4 +1,5 @@
 #include "lexer/lexer.hpp"
+#include "parser/parser.hpp"
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -6,9 +7,27 @@
 
 namespace fs = std::filesystem;
 
+void printHeader(const std::string& title) {
+    std::string border(50, '=');
+    std::cout << "\n" << border << "\n";
+    int padding = (50 - (int)title.size()) / 2;
+    std::cout << std::string(padding, ' ') << title << "\n";
+    std::cout << border << "\n";
+}
+
+void printSeparator() {
+    std::cout << std::string(50, '-') << "\n";
+}
+
+
 int main(int argc, char* argv[]) {
     string inputPath;
-    cout << "ARION LEXICAL ANALYZER" << endl;
+    std::cout << "\n";
+    std::cout << "╔══════════════════════════════════════════════════╗\n";
+    std::cout << "║                 ARION COMPILER                   ║\n";
+    std::cout << "║     Lexical Analyzer  +  Syntax Analyzer         ║\n";
+    std::cout << "╚══════════════════════════════════════════════════╝\n";
+    std::cout << "\n";
     cout << "Masukkan path file input (.txt): ";
     getline(cin, inputPath);
     cout << endl;
@@ -19,54 +38,88 @@ int main(int argc, char* argv[]) {
         inputPath.pop_back();
 
     if (!fs::exists(inputPath)) {
-        std::cerr << "Error: File tidak ditemukan: " << inputPath << endl;
+        std::cerr << "[ERROR]: File tidak ditemukan: " << inputPath << endl;
         return 1;
     }
 
     if (fs::path(inputPath).extension() != ".txt") {
-        std::cerr << "Error: File harus bertipe .txt" << endl;
+        std::cerr << "[ERROR]: File harus bertipe .txt" << endl;
         return 1;
     }
 
-    fs::path outDir = "test/milestone-1";
-    fs::create_directories(outDir); 
+    // fs::path outDirLexer = "test/milestone-1";
+    fs::path outDirParser = "test/milestone-2";
+    // fs::create_directories(outDirLexer);
+    fs::create_directories(outDirParser);
 
-    std::string stem    = fs::path(inputPath).stem().string();
-    fs::path outputPath = outDir / ("output-" + stem + ".txt");
+    std::string stem = fs::path(inputPath).stem().string();
+    // fs::path outputLexer = outDirLexer  / ("output-" + stem + ".txt");
+    fs::path outputParser = outDirParser / ("output-" + stem + ".txt");
 
-    std::ofstream outFile(outputPath);
-    if (!outFile.is_open()) {
-        std::cerr << "Error: Tidak dapat membuka file output: " << outputPath << std::endl;
-        return 1;
-    }
+    // std::ofstream outFile(outputLexer);
+
+    // if (!outFile.is_open()) {
+    //     std::cerr << "[ERROR]: Tidak dapat membuka file output: " << outputLexer << std::endl;
+    //     return 1;
+    // }
 
     try {
         Lexer lexer(inputPath);
+        std::vector<Token> tokens;
 
-        std::cout << "Path file input : " << inputPath << std::endl;
-        std::cout << "Path file output: " << outputPath << std::endl;
-        std::cout << std::string(40, '-') << std::endl;
+        printHeader("LEXICAL ANALYSIS");
+        int tokenCount = 0;
 
         while (!lexer.isEOF()) {
             Token tok = lexer.nextToken();
 
-            if (tok.type == EOF_TOKEN) break;
-
+            if (tok.type == EOF_TOKEN) {
+                tokens.push_back(tok);
+                break;
+            }
+            
             std::string formatted = Lexer::formatToken(tok);
-
             std::cout << formatted << std::endl;
+            // outFile << formatted << std::endl;
 
-            outFile << formatted << std::endl;
+            if (tok.type == COMMENT) continue;
+            tokens.push_back(tok);
+            tokenCount++;
         }
 
-        std::cout << std::string(40, '-') << std::endl;
-        std::cout << "Lexical analysis selesai. Output disimpan di " << outputPath << std::endl;
+        printSeparator();
+        std::cout << "  Total token : " << tokenCount << " token\n";
+        std::cout << "  Status      : Lexical analysis selesai\n";
 
+        printHeader("SYNTAX ANALYSIS (PARSE TREE)");
+    
+        Parser parser(tokens);
+        NodePtr tree = parser.parse();
+    
+        Parser::printTree(tree, std::cout);
+    
+        std::ofstream outParser(outputParser);
+        Parser::printTree(tree, outParser);
+        outParser.close();
+
+        printSeparator();
+        std::cout << "  Status      : Syntax analysis selesai\n";
+        std::cout << "  Output      : " << outputParser << "\n";
+
+    } catch (const SyntaxError& e) {
+        std::cout << std::endl << "*** " << e.what() << std::endl;
+
+        std::ofstream outParser(outputParser);
+        outParser << e.what() << "\n";
+        outParser.close();
+        // outFile.close();
+        return 1;
+        
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "[ERROR]: " << e.what() << std::endl;
         return 1;
     }
-
-    outFile.close();
+ 
+    // outFile.close();
     return 0;
 }

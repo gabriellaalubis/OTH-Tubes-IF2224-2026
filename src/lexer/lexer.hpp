@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <queue>
+#include <vector>
 
 enum DFAState {
     S0,              
@@ -48,6 +49,8 @@ public:
     Token nextToken();
 
     bool isEOF() const;
+
+    vector<Token> tokenizeAll();
 
     static std::string formatToken(const Token& tok);
 

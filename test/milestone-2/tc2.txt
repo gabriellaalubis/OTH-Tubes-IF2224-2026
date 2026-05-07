@@ -1,0 +1,8 @@
+program ExprTest;
+var
+  x, y, z: integer;
+  flag: boolean;
+begin
+  x := 2 + 3 * 4;
+  y := not (x == 5);
+end.
