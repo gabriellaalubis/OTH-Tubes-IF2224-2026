@@ -373,14 +373,20 @@ Token Lexer::nextToken() {
         }
 
         case S_IDENT: {
-            if (isLetter(c) || isDigit(c)) {
+            if (isLetter(c)) {
                 buffer += c;
+            } else if (isDigit(c)) {
+                setPending(c);
+                TokenType tt = classifyIdent(buffer);
+                if (tt == IDENT) return {IDENT, buffer, tokLine, tokCol};
+                else {
+                    return {tt, "", tokLine, tokCol};
+                }
             } else {
                 setPending(c);
                 TokenType tt = classifyIdent(buffer);
-                if (tt == IDENT) {
-                    return {IDENT, buffer, tokLine, tokCol};
-                } else {
+                if (tt == IDENT) return {IDENT, buffer, tokLine, tokCol};
+                else {
                     return {tt, "", tokLine, tokCol};
                 }
             }

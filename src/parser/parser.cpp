@@ -592,7 +592,8 @@ NodePtr Parser::parseWhileStatement() {
     node->children.push_back(expect(WHILESY));
     node->children.push_back(parseExpression());
     node->children.push_back(expect(DOSY));
-    node->children.push_back(parseStatement());
+    node->children.push_back(parseCompoundStatement());
+    node->children.push_back(expect(SEMICOLON));
     return node;
 }
 
@@ -624,7 +625,8 @@ NodePtr Parser::parseForStatement() {
     }
     node->children.push_back(parseExpression());
     node->children.push_back(expect(DOSY));
-    node->children.push_back(parseStatement());
+    node->children.push_back(parseCompoundStatement());
+    node->children.push_back(expect(SEMICOLON));
     return node;
 }
 
