@@ -5,7 +5,10 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
 SRCS = src/main.cpp \
        src/lexer/lexer.cpp \
        src/lexer/token.cpp \
-	   src/parser/parser.cpp
+	   src/parser/parser.cpp \
+	   src/semantic/semantic.cpp \
+	   src/semantic/ast.cpp \
+	   src/semantic/symbol_table.cpp
 
 TARGET = arion
 

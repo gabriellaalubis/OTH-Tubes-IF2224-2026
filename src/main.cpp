@@ -1,5 +1,6 @@
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
+#include "semantic/semantic.hpp"
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -49,12 +50,15 @@ int main(int argc, char* argv[]) {
 
     // fs::path outDirLexer = "test/milestone-1";
     fs::path outDirParser = "test/milestone-2";
+    fs::path outDirSemantic = "test/milestone-3";
     // fs::create_directories(outDirLexer);
     fs::create_directories(outDirParser);
+    fs::create_directories(outDirSemantic);
 
     std::string stem = fs::path(inputPath).stem().string();
     // fs::path outputLexer = outDirLexer  / ("output-" + stem + ".txt");
     fs::path outputParser = outDirParser / ("output-" + stem + ".txt");
+    fs::path outputSemantic = outDirSemantic / ("output-" + stem + ".txt");
 
     // std::ofstream outFile(outputLexer);
 
@@ -91,6 +95,8 @@ int main(int argc, char* argv[]) {
         std::cout << "  Total token : " << tokenCount << " token\n";
         std::cout << "  Status      : Lexical analysis selesai\n";
 
+        // PARSER
+
         printHeader("SYNTAX ANALYSIS (PARSE TREE)");
     
         Parser parser(tokens);
@@ -106,6 +112,29 @@ int main(int argc, char* argv[]) {
         std::cout << "  Status      : Syntax analysis selesai\n";
         std::cout << "  Output      : " << outputParser << "\n";
 
+        // SEMANTIC
+
+        printHeader("SEMANTIC ANALYSIS (DECORATED AST)");
+ 
+        SemanticAnalyser semantic;
+        ASTPtr ast = semantic.analyse(tree);
+
+        semantic.printResults(std::cout);
+
+        std::ofstream outSemantic(outputSemantic);
+        semantic.printResults(outSemantic);
+        outSemantic.close();
+ 
+        printSeparator();
+        std::cout << "  Status      : Semantic analysis selesai\n";
+        std::cout << "  Output      : " << outputSemantic << "\n";
+
+        if (!semantic.getWarnings().empty()) {
+            std::cout << "\n  [WARNINGS]\n";
+            for (auto& w : semantic.getWarnings())
+                std::cout << "  " << w.message << "\n";
+        }
+
     } catch (const SyntaxError& e) {
         std::cout << std::endl << "*** " << e.what() << std::endl;
 
@@ -115,6 +144,14 @@ int main(int argc, char* argv[]) {
         // outFile.close();
         return 1;
         
+    } catch (const SemanticError& e) {
+        std::cout << std::endl << "*** " << e.what() << std::endl;
+ 
+        std::ofstream outSemantic(outputSemantic);
+        outSemantic << e.what() << "\n";
+        outSemantic.close();
+        return 1;
+
     } catch (const std::exception& e) {
         std::cerr << "[ERROR]: " << e.what() << std::endl;
         return 1;
