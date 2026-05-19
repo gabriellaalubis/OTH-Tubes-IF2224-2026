@@ -69,7 +69,7 @@ bool Parser::isMultiplicativeOp() const {
 }
 
 bool Parser::isConstantStart() const {
-    return checkAny({CHARCON, STRING, IDENT, INTCON, REALCON, PLUS, MINUS});
+    return checkAny({CHARCON, STRING, IDENT, INTCON, REALCON, TRUESY, FALSESY, PLUS, MINUS});
 }
 
 bool Parser::isTypeStart() const {
@@ -154,18 +154,18 @@ NodePtr Parser::parseConstDeclaration() {
 
 NodePtr Parser::parseConstant() {
     auto node = std::make_shared<ParseNode>("<constant>");
-    if (check(CHARCON) || check(STRING)) {
+    if (check(CHARCON) || check(STRING) || check(TRUESY) || check(FALSESY)) {
         node->children.push_back(consume());
     } else {
         if (check(PLUS) || check(MINUS))
             node->children.push_back(consume());
-        if (checkAny({IDENT, INTCON, REALCON}))
+        if (checkAny({IDENT, INTCON, REALCON, TRUESY, FALSESY}))
             node->children.push_back(consume());
         else {
             const Token& cur = current();
             std::ostringstream oss;
             oss << "Syntax error at line " << cur.line
-                << ": expected constant value (ident, intcon, realcon, charcon, or string)"
+                << ": expected constant value (ident, intcon, realcon, charcon, string, true, or false)"
                 << ", got '" << tokenTypetoString(cur.type) << "'";
             throw SyntaxError(oss.str());
         }
@@ -698,7 +698,8 @@ NodePtr Parser::parseTerm() {
 NodePtr Parser::parseFactor() {
     auto node = std::make_shared<ParseNode>("<factor>");
 
-    if (check(INTCON) || check(REALCON) || check(CHARCON) || check(STRING)) {
+    if (check(INTCON) || check(REALCON) || check(CHARCON) || check(STRING)
+        || check(TRUESY) || check(FALSESY)) {
         node->children.push_back(consume());
 
     } else if (check(IDENT)) {

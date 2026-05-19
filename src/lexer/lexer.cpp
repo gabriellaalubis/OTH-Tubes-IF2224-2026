@@ -36,6 +36,8 @@ std::map<std::string, TokenType> Lexer::initKeywords() {
     kw["to"]        = TOSY;
     kw["downto"]    = DOWNTOSY;
     kw["then"]      = THENSY;
+    kw["true"]      = TRUESY;
+    kw["false"]     = FALSESY;
 
     return kw;
 }
@@ -466,9 +468,8 @@ Token Lexer::nextToken() {
         }
 
         case S_EQL: {
-            if (c == '=') return {EQL, "", tokLine, tokCol};
             setPending(c);
-            return {UNKNOWN, "=", tokLine, tokCol};
+            return {EQL, "", tokLine, tokCol};
         }
 
         case S_LPAREN: {

@@ -10,6 +10,10 @@ string tokenTypetoString(TokenType type){
             return "charcon";
         case STRING:    
             return "string";
+        case TRUESY:
+            return "truesy";
+        case FALSESY:
+            return "falsesy";
         case NOTSY:    
             return "notsy";
         case PLUS:    

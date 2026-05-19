@@ -814,6 +814,8 @@ ASTPtr SemanticAnalyser::buildFactor(const NodePtr& n) {
     if (labelStartsWith(first, "REALCON")) return makeNode(ASTNodeKind::CONST_REAL,   valueOf(first));
     if (labelStartsWith(first, "CHARCON")) return makeNode(ASTNodeKind::CONST_CHAR,   valueOf(first));
     if (labelStartsWith(first, "STRING"))  return makeNode(ASTNodeKind::CONST_STRING, valueOf(first));
+    if (labelStartsWith(first, "TRUESY"))  return makeNode(ASTNodeKind::CONST_BOOL,   "true");
+    if (labelStartsWith(first, "FALSESY")) return makeNode(ASTNodeKind::CONST_BOOL,   "false");
 
     // Variabel atau function call
     if (lbl == "<variable>")               return buildVariable(first);
@@ -904,6 +906,10 @@ ASTPtr SemanticAnalyser::buildConstant(const NodePtr& n) {
             return makeNode(ASTNodeKind::CONST_CHAR, valueOf(ch));
         if (labelStartsWith(ch, "STRING"))
             return makeNode(ASTNodeKind::CONST_STRING, valueOf(ch));
+        if (labelStartsWith(ch, "TRUESY"))
+            return makeNode(ASTNodeKind::CONST_BOOL, "true");
+        if (labelStartsWith(ch, "FALSESY"))
+            return makeNode(ASTNodeKind::CONST_BOOL, "false");
         if (labelStartsWith(ch, "IDENT"))
             return makeNode(ASTNodeKind::VAR_REF, valueOf(ch));
     }
