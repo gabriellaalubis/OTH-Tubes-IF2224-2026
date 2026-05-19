@@ -355,9 +355,11 @@ ASTPtr SemanticAnalyser::buildParamGroup(const NodePtr& n) {
         if (ch->label == "<identifier-list>") identList = buildIdentList(ch);
         else if (ch->label == "<type>")       typeNode  = buildType(ch);
         else if (ch->label == "<array-type>") typeNode  = buildArrayType(ch);
-        else if (labelStartsWith(ch, "IDENT") && !identList) {
-            // tipe tunggal (e.g., : Integer)
-            typeNode = makeNode(ASTNodeKind::TYPE_IDENT, valueOf(ch));
+        else if (labelStartsWith(ch, "IDENT")) {
+            if (!identList)
+                identList = makeNode(ASTNodeKind::IDENT_LIST);
+            else
+                typeNode = makeNode(ASTNodeKind::TYPE_IDENT, valueOf(ch));
         }
     }
 
@@ -377,7 +379,11 @@ ASTPtr SemanticAnalyser::buildType(const NodePtr& n) {
     if (first->label == "<array-type>")   return buildArrayType(first);
     if (first->label == "<enumerated>")   return buildEnumerated(first);
     if (first->label == "<record-type>")  return buildRecordType(first);
-    if (first->label == "<range>")        return buildRange(first);
+    if (first->label == "<range>") {
+        auto subrange = makeNode(ASTNodeKind::TYPE_SUBRANGE);
+        subrange->children.push_back(buildRange(first));
+        return subrange;
+    }
     if (labelStartsWith(first, "IDENT"))  return makeNode(ASTNodeKind::TYPE_IDENT, valueOf(first));
 
     return buildAST(first);
@@ -983,6 +989,7 @@ void SemanticAnalyser::visitConstDecl(const ASTPtr& n) {
     }
 
     int idx = symtab_.addTab(n->name, ObjClass::CONSTANT, dt, 0, 1, 0);
+    symtab_.tab()[idx].initialized = true;
     n->tabIndex  = idx;
     n->lexLevel  = symtab_.currentLevel();
     n->dataType  = dt;
@@ -1103,10 +1110,39 @@ void SemanticAnalyser::visitProcDecl(const ASTPtr& n) {
     n->blockIndex = blockIdx;
     n->lexLevel   = symtab_.currentLevel();
 
-    // Kunjungi body (block)
     for (auto& ch : n->children) {
-        if (ch->kind == ASTNodeKind::BLOCK) visitBlock(ch);
-        else if (ch->kind == ASTNodeKind::COMPOUND) visitCompound(ch);
+        if (ch->kind == ASTNodeKind::IDENT_LIST && ch->name == "params") {
+            int adrOffset = 0;
+            for (auto& pg : ch->children) {
+                if (pg->kind != ASTNodeKind::PARAM_DECL) continue;
+                ASTPtr identList = nullptr;
+                ASTPtr typeNode  = nullptr;
+                for (auto& pgch : pg->children) {
+                    if (pgch->kind == ASTNodeKind::IDENT_LIST) identList = pgch;
+                    else typeNode = pgch;
+                }
+                if (!identList) continue;
+                DataType dt = resolveTypeNode(typeNode);
+                for (auto& idNode : identList->children) {
+                    if (symtab_.lookupCurrentBlock(idNode->name) >= 0)
+                        semanticError("Parameter '" + idNode->name + "' sudah dideklarasikan.");
+                    int varSize = symtab_.sizeOf(dt);
+                    int tabIdx = symtab_.addTab(idNode->name, ObjClass::PARAMETER, dt, 0, 1, adrOffset);
+                    symtab_.tab()[tabIdx].initialized = true;
+                    adrOffset += varSize;
+                    idNode->tabIndex = tabIdx;
+                    idNode->lexLevel = symtab_.currentLevel();
+                    idNode->dataType = dt;
+                }
+            }
+            int curBlock = symtab_.blockAt(symtab_.currentLevel());
+            symtab_.btab()[curBlock].lpar = symtab_.btab()[curBlock].last;
+            symtab_.btab()[curBlock].psze = adrOffset;
+        } else if (ch->kind == ASTNodeKind::BLOCK) {
+            visitBlock(ch);
+        } else if (ch->kind == ASTNodeKind::COMPOUND) {
+            visitCompound(ch);
+        }
     }
 
     symtab_.leaveBlock();
@@ -1131,8 +1167,38 @@ void SemanticAnalyser::visitFuncDecl(const ASTPtr& n) {
     n->lexLevel   = symtab_.currentLevel();
 
     for (auto& ch : n->children) {
-        if (ch->kind == ASTNodeKind::BLOCK) visitBlock(ch);
-        else if (ch->kind == ASTNodeKind::COMPOUND) visitCompound(ch);
+        if (ch->kind == ASTNodeKind::IDENT_LIST && ch->name == "params") {
+            int adrOffset = 0;
+            for (auto& pg : ch->children) {
+                if (pg->kind != ASTNodeKind::PARAM_DECL) continue;
+                ASTPtr identList = nullptr;
+                ASTPtr typeNode  = nullptr;
+                for (auto& pgch : pg->children) {
+                    if (pgch->kind == ASTNodeKind::IDENT_LIST) identList = pgch;
+                    else typeNode = pgch;
+                }
+                if (!identList) continue;
+                DataType dt = resolveTypeNode(typeNode);
+                for (auto& idNode : identList->children) {
+                    if (symtab_.lookupCurrentBlock(idNode->name) >= 0)
+                        semanticError("Parameter '" + idNode->name + "' sudah dideklarasikan.");
+                    int varSize = symtab_.sizeOf(dt);
+                    int tabIdx = symtab_.addTab(idNode->name, ObjClass::PARAMETER, dt, 0, 1, adrOffset);
+                    symtab_.tab()[tabIdx].initialized = true;
+                    adrOffset += varSize;
+                    idNode->tabIndex = tabIdx;
+                    idNode->lexLevel = symtab_.currentLevel();
+                    idNode->dataType = dt;
+                }
+            }
+            int curBlock = symtab_.blockAt(symtab_.currentLevel());
+            symtab_.btab()[curBlock].lpar = symtab_.btab()[curBlock].last;
+            symtab_.btab()[curBlock].psze = adrOffset;
+        } else if (ch->kind == ASTNodeKind::BLOCK) {
+            visitBlock(ch);
+        } else if (ch->kind == ASTNodeKind::COMPOUND) {
+            visitCompound(ch);
+        }
     }
 
     symtab_.leaveBlock();
@@ -1164,8 +1230,22 @@ void SemanticAnalyser::visitCompound(const ASTPtr& n) {
 void SemanticAnalyser::visitAssign(const ASTPtr& n) {
     if (n->children.size() < 2) return;
 
-    // target (children[0])
-    DataType targetType = visitExpr(n->children[0]);
+    auto& target = n->children[0];
+    DataType targetType = DataType::NOTYPE;
+    if (target->kind == ASTNodeKind::VAR_REF) {
+        int idx = symtab_.lookup(target->name);
+        if (idx < 0)
+            semanticError("Identifier '" + target->name + "' belum dideklarasikan.");
+        auto& entry = symtab_.tab()[idx];
+        target->tabIndex = idx;
+        target->lexLevel = entry.lev;
+        target->dataType = entry.type;
+        targetType = entry.type;
+    } else {
+        // target berupa array access atau field access — cek tipe via visitExpr biasa
+        targetType = visitExpr(target);
+    }
+
     // value  (children[1])
     DataType valueType  = visitExpr(n->children[1]);
 
@@ -1174,6 +1254,12 @@ void SemanticAnalyser::visitAssign(const ASTPtr& n) {
             + dataTypeToString(targetType) + "', nilai bertipe '"
             + dataTypeToString(valueType) + "'.");
     }
+
+    if (target->tabIndex >= 0) {
+        symtab_.tab()[target->tabIndex].initialized = true;
+        target->initialized = true;
+    }
+
     n->dataType = DataType::VOID;
 }
 
@@ -1333,6 +1419,10 @@ DataType SemanticAnalyser::visitVarRef(const ASTPtr& n) {
     n->tabIndex  = idx;
     n->lexLevel  = entry.lev;
     n->dataType  = entry.type;
+
+    if (entry.obj == ObjClass::VARIABLE && !entry.initialized)
+        semanticError("Variabel tidak bisa dioperasikan jika belum diinisialisasi dengan nilai.");
+
     return entry.type;
 }
 

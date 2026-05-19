@@ -48,24 +48,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // fs::path outDirLexer = "test/milestone-1";
-    fs::path outDirParser = "test/milestone-2";
     fs::path outDirSemantic = "test/milestone-3";
-    // fs::create_directories(outDirLexer);
-    fs::create_directories(outDirParser);
     fs::create_directories(outDirSemantic);
 
     std::string stem = fs::path(inputPath).stem().string();
-    // fs::path outputLexer = outDirLexer  / ("output-" + stem + ".txt");
-    fs::path outputParser = outDirParser / ("output-" + stem + ".txt");
     fs::path outputSemantic = outDirSemantic / ("output-" + stem + ".txt");
-
-    // std::ofstream outFile(outputLexer);
-
-    // if (!outFile.is_open()) {
-    //     std::cerr << "[ERROR]: Tidak dapat membuka file output: " << outputLexer << std::endl;
-    //     return 1;
-    // }
 
     try {
         Lexer lexer(inputPath);
@@ -81,10 +68,9 @@ int main(int argc, char* argv[]) {
                 tokens.push_back(tok);
                 break;
             }
-            
+
             std::string formatted = Lexer::formatToken(tok);
             std::cout << formatted << std::endl;
-            // outFile << formatted << std::endl;
 
             if (tok.type == COMMENT) continue;
             tokens.push_back(tok);
@@ -95,27 +81,18 @@ int main(int argc, char* argv[]) {
         std::cout << "  Total token : " << tokenCount << " token\n";
         std::cout << "  Status      : Lexical analysis selesai\n";
 
-        // PARSER
-
         printHeader("SYNTAX ANALYSIS (PARSE TREE)");
-    
+
         Parser parser(tokens);
         NodePtr tree = parser.parse();
-    
+
         Parser::printTree(tree, std::cout);
-    
-        std::ofstream outParser(outputParser);
-        Parser::printTree(tree, outParser);
-        outParser.close();
 
         printSeparator();
         std::cout << "  Status      : Syntax analysis selesai\n";
-        std::cout << "  Output      : " << outputParser << "\n";
-
-        // SEMANTIC
 
         printHeader("SEMANTIC ANALYSIS (DECORATED AST)");
- 
+
         SemanticAnalyser semantic;
         ASTPtr ast = semantic.analyse(tree);
 
@@ -124,7 +101,7 @@ int main(int argc, char* argv[]) {
         std::ofstream outSemantic(outputSemantic);
         semantic.printResults(outSemantic);
         outSemantic.close();
- 
+
         printSeparator();
         std::cout << "  Status      : Semantic analysis selesai\n";
         std::cout << "  Output      : " << outputSemantic << "\n";
@@ -137,16 +114,11 @@ int main(int argc, char* argv[]) {
 
     } catch (const SyntaxError& e) {
         std::cout << std::endl << "*** " << e.what() << std::endl;
-
-        std::ofstream outParser(outputParser);
-        outParser << e.what() << "\n";
-        outParser.close();
-        // outFile.close();
         return 1;
-        
+
     } catch (const SemanticError& e) {
         std::cout << std::endl << "*** " << e.what() << std::endl;
- 
+
         std::ofstream outSemantic(outputSemantic);
         outSemantic << e.what() << "\n";
         outSemantic.close();
@@ -156,7 +128,6 @@ int main(int argc, char* argv[]) {
         std::cerr << "[ERROR]: " << e.what() << std::endl;
         return 1;
     }
- 
-    // outFile.close();
+
     return 0;
 }

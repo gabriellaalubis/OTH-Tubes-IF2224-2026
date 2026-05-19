@@ -1,0 +1,46 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestSubrange')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── TypeDecl
+    │   │   └── TypeDecl('SmallNum')  →  type:Subrange tab:34 
+    │   │       └── TypeSubrange
+    │   │           └── Range
+    │   │               ├── ConstInt('1')
+    │   │               └── ConstInt('10')
+    │   └── VarDecl('x')  →  type:Subrange tab:35 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('x' := 5)  →  type:Void 
+        │   ├── VarRef('x')  →  type:Subrange tab:35 lev:0 
+        │   └── ConstInt('5')  →  type:Integer 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestSubrange    program     Void        0     1     0     0       0     
+34   SmallNum        type        Subrange    0     1     0     0       33    
+35   x               variable    Subrange    0     1     0     0       34    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    35      0       0       1       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

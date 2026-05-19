@@ -1,0 +1,7 @@
+program TestInit;
+var
+  x, y: integer;
+begin
+  y := x + 5;
+  writeln(y);
+end.

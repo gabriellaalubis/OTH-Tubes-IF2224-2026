@@ -1,0 +1,8 @@
+program TestSubrange;
+type
+  SmallNum == 1 .. 10;
+var
+  x: SmallNum;
+begin
+  x := 5;
+end.

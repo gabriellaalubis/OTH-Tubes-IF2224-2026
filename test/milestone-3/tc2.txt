@@ -1,0 +1,9 @@
+program TestParam;
+procedure greet(name: string; age: integer);
+begin
+  writeln(name);
+  writeln(age);
+end;
+begin
+  greet('Alice', 25);
+end.

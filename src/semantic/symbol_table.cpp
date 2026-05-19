@@ -42,66 +42,77 @@ void SymbolTable::initPredefined() {
     {
         TabEntry e; e.name = "integer"; e.obj = ObjClass::TYPE_NAME;
         e.type = DataType::INTEGER; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 2: Real
     {
         TabEntry e; e.name = "real"; e.obj = ObjClass::TYPE_NAME;
         e.type = DataType::REAL; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 3: Char
     {
         TabEntry e; e.name = "char"; e.obj = ObjClass::TYPE_NAME;
         e.type = DataType::CHAR; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 4: Boolean
     {
         TabEntry e; e.name = "boolean"; e.obj = ObjClass::TYPE_NAME;
         e.type = DataType::BOOLEAN; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 5: String
     {
         TabEntry e; e.name = "string"; e.obj = ObjClass::TYPE_NAME;
         e.type = DataType::STRING; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 6: True
     {
         TabEntry e; e.name = "true"; e.obj = ObjClass::CONSTANT;
         e.type = DataType::BOOLEAN; e.lev = 0; e.adr = 1; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 7: False
     {
         TabEntry e; e.name = "false"; e.obj = ObjClass::CONSTANT;
         e.type = DataType::BOOLEAN; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 8: writeln
     {
         TabEntry e; e.name = "writeln"; e.obj = ObjClass::PROCEDURE;
         e.type = DataType::VOID; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 9: readln
     {
         TabEntry e; e.name = "readln"; e.obj = ObjClass::PROCEDURE;
         e.type = DataType::VOID; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 10: write
     {
         TabEntry e; e.name = "write"; e.obj = ObjClass::PROCEDURE;
         e.type = DataType::VOID; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
     // 11: read
     {
         TabEntry e; e.name = "read"; e.obj = ObjClass::PROCEDURE;
         e.type = DataType::VOID; e.lev = 0; e.adr = 0; e.link = 0;
+        e.initialized = true;
         tab_.push_back(e);
     }
 
@@ -144,6 +155,7 @@ int SymbolTable::addTab(const std::string& name, ObjClass obj,
     int curBlock = display_.back();
     e.link = btab_[curBlock].last;
 
+    e.initialized = false;
     tab_.push_back(e);
     int newIdx = (int)tab_.size() - 1;
 

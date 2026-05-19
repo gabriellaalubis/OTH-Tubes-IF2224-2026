@@ -29,6 +29,7 @@ struct TabEntry {
     int nrm = 1;
     int lev = 0;
     int adr = 0;
+    bool initialized = false;
 };
 
 // Kalau simbolnya array, detailnya disimpan di sini

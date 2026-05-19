@@ -1,0 +1,58 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestParam')  →  type:Void tab:33 btab:2 lev:0 
+    ├── Block('declarations')
+    │   └── ProcDecl('greet')  →  type:Void tab:34 btab:1 lev:1 
+    │       ├── IdentList('params')
+    │       │   ├── ParamDecl
+    │       │   │   ├── IdentList
+    │       │   │   │   └── VarRef('name')  →  type:String tab:35 lev:1 
+    │       │   │   └── TypeIdent('string')
+    │       │   └── ParamDecl
+    │       │       ├── IdentList
+    │       │       │   └── VarRef('age')  →  type:Integer tab:36 lev:1 
+    │       │       └── TypeIdent('integer')
+    │       └── Block
+    │           └── Block
+    │               ├── writeln(...)  →  type:Void tab:8 lev:0 
+    │               │   └── VarRef('name')  →  type:String tab:35 lev:1 
+    │               ├── writeln(...)  →  type:Void tab:8 lev:0 
+    │               │   └── VarRef('age')  →  type:Integer tab:36 lev:1 
+    │               └── EmptyStmt
+    └── Block  →  btab:2 lev:1 
+        ├── greet(...)  →  type:Void tab:34 lev:0 
+        │   ├── ConstString('Alice')  →  type:String 
+        │   └── ConstInt('25')  →  type:Integer 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestParam       program     Void        0     1     0     0       0     
+34   greet           procedure   Void        0     1     0     0       33    
+35   name            parameter   String      0     1     1     0       0     
+36   age             parameter   Integer     0     1     1     256     35    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    34      0       0       0       
+1    36      36      257     0       
+2    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)
