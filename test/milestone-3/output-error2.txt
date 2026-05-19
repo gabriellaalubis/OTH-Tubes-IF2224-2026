@@ -1,0 +1,1 @@
+[SEMANTIC ERROR] Identifier 'x' sudah dideklarasikan dalam scope ini.

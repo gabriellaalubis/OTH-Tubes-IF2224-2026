@@ -1,0 +1,63 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestCase')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── VarDecl('x')  →  type:Integer tab:34 lev:0 
+    │   └── VarDecl('result')  →  type:Integer tab:35 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('x' := 2)  →  type:Void 
+        │   ├── VarRef('x')  →  type:Integer tab:34 lev:0 
+        │   └── ConstInt('2')  →  type:Integer 
+        ├── Assign('result' := 0)  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:35 lev:0 
+        │   └── ConstInt('0')  →  type:Integer 
+        ├── CaseStmt  →  type:Void 
+        │   ├── VarRef('x')  →  type:Integer tab:34 lev:0 
+        │   └── CaseBlock
+        │       ├── ConstInt('1')  →  type:Integer 
+        │       ├── Assign('result' := 10)  →  type:Void 
+        │       │   ├── VarRef('result')  →  type:Integer tab:35 lev:0 
+        │       │   └── ConstInt('10')  →  type:Integer 
+        │       └── CaseBlock
+        │           ├── ConstInt('2')  →  type:Integer 
+        │           ├── Assign('result' := 20)  →  type:Void 
+        │           │   ├── VarRef('result')  →  type:Integer tab:35 lev:0 
+        │           │   └── ConstInt('20')  →  type:Integer 
+        │           └── CaseBlock
+        │               ├── ConstInt('3')  →  type:Integer 
+        │               └── Assign('result' := 30)  →  type:Void 
+        │                   ├── VarRef('result')  →  type:Integer tab:35 lev:0 
+        │                   └── ConstInt('30')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('result')  →  type:Integer tab:35 lev:0 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestCase        program     Void        0     1     0     0       0     
+34   x               variable    Integer     0     1     0     0       33    
+35   result          variable    Integer     0     1     0     1       34    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    35      0       0       2       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

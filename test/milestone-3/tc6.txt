@@ -1,0 +1,12 @@
+program TestArray;
+var
+  arr: array[1 .. 5] of integer;
+  i: integer;
+begin
+  arr[1] := 10;
+  arr[2] := 20;
+  arr[3] := arr[2] + arr[1];
+  i := 3;
+  arr[i] := arr[1] + arr[2];
+  writeln(arr[3]);
+end.

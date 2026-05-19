@@ -1,0 +1,11 @@
+program TestTypes;
+type
+  SmallInt == 1 .. 10;
+  Color == (Red, Green, Blue);
+var
+  n: SmallInt;
+  c: Color;
+begin
+  n := 5;
+  writeln(n);
+end.

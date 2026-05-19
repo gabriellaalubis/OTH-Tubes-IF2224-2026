@@ -1,9 +1,17 @@
-program TestParam;
-procedure greet(name: string; age: integer);
+program TestBasicTypes;
+var
+  i: integer;
+  r: real;
+  c: char;
+  b: boolean;
 begin
-  writeln(name);
-  writeln(age);
-end;
-begin
-  greet('Alice', 25);
+  i := 42;
+  r := 3.14;
+  c := 'A';
+  b := true;
+  b := i > 10;
+  b := i == 42;
+  r := i;
+  writeln(i);
+  writeln(r);
 end.

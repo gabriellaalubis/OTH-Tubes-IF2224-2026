@@ -2,19 +2,57 @@
 ╔══════════════════════════════════════════════════╗
 ║           DECORATED ABSTRACT SYNTAX TREE         ║
 ╚══════════════════════════════════════════════════╝
-└── Program('TestSubrange')  →  type:Void tab:33 btab:1 lev:0 
+└── Program('TestConst')  →  type:Void tab:33 btab:1 lev:0 
     ├── Block('declarations')
-    │   ├── TypeDecl
-    │   │   └── TypeDecl('SmallNum')  →  type:Subrange tab:34 
-    │   │       └── TypeSubrange
-    │   │           └── Range
-    │   │               ├── ConstInt('1')
-    │   │               └── ConstInt('10')
-    │   └── VarDecl('x')  →  type:Subrange tab:35 lev:0 
+    │   ├── ConstDecl
+    │   │   ├── ConstDecl('MAX')  →  type:Integer tab:34 lev:0 
+    │   │   │   └── ConstInt('100')  →  type:Integer 
+    │   │   └── ConstDecl('PI')  →  type:Real tab:35 lev:0 
+    │   │       └── ConstReal('3.14')  →  type:Real 
+    │   ├── VarDecl('x')  →  type:Integer tab:36 lev:0 
+    │   ├── VarDecl('y')  →  type:Integer tab:37 lev:0 
+    │   └── VarDecl('z')  →  type:Real tab:38 lev:0 
     └── Block  →  btab:1 lev:1 
-        ├── Assign('x' := 5)  →  type:Void 
-        │   ├── VarRef('x')  →  type:Subrange tab:35 lev:0 
-        │   └── ConstInt('5')  →  type:Integer 
+        ├── Assign('x' := 'MAX')  →  type:Void 
+        │   ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │   └── VarRef('MAX')  →  type:Integer tab:34 lev:0 
+        ├── Assign('y' := 'x'+5)  →  type:Void 
+        │   ├── VarRef('y')  →  type:Integer tab:37 lev:0 
+        │   └── BinOp('+')  →  type:Integer 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('5')  →  type:Integer 
+        ├── Assign('y' := 'x'-3)  →  type:Void 
+        │   ├── VarRef('y')  →  type:Integer tab:37 lev:0 
+        │   └── BinOp('-')  →  type:Integer 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('3')  →  type:Integer 
+        ├── Assign('y' := 'x'*2)  →  type:Void 
+        │   ├── VarRef('y')  →  type:Integer tab:37 lev:0 
+        │   └── BinOp('*')  →  type:Integer 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('2')  →  type:Integer 
+        ├── Assign('z' := 'x'/4)  →  type:Void 
+        │   ├── VarRef('z')  →  type:Real tab:38 lev:0 
+        │   └── BinOp('/')  →  type:Real 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('4')  →  type:Integer 
+        ├── Assign('y' := 'x'div3)  →  type:Void 
+        │   ├── VarRef('y')  →  type:Integer tab:37 lev:0 
+        │   └── BinOp('div')  →  type:Integer 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('3')  →  type:Integer 
+        ├── Assign('y' := 'x'mod7)  →  type:Void 
+        │   ├── VarRef('y')  →  type:Integer tab:37 lev:0 
+        │   └── BinOp('mod')  →  type:Integer 
+        │       ├── VarRef('x')  →  type:Integer tab:36 lev:0 
+        │       └── ConstInt('7')  →  type:Integer 
+        ├── Assign('z' := 'PI')  →  type:Void 
+        │   ├── VarRef('z')  →  type:Real tab:38 lev:0 
+        │   └── VarRef('PI')  →  type:Real tab:35 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('y')  →  type:Integer tab:37 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('z')  →  type:Real tab:38 lev:0 
         └── EmptyStmt
 
 ===== TAB (Identifier Table) =====
@@ -32,14 +70,17 @@ idx  name            obj         type        ref   nrm   lev   adr     link
 9    readln          procedure   Void        0     1     0     0       0     
 10   write           procedure   Void        0     1     0     0       0     
 11   read            procedure   Void        0     1     0     0       0     
-33   TestSubrange    program     Void        0     1     0     0       0     
-34   SmallNum        type        Subrange    0     1     0     0       33    
-35   x               variable    Subrange    0     1     0     0       34    
+33   TestConst       program     Void        0     1     0     0       0     
+34   MAX             constant    Integer     0     1     0     0       33    
+35   PI              constant    Real        0     1     0     0       34    
+36   x               variable    Integer     0     1     0     0       35    
+37   y               variable    Integer     0     1     0     1       36    
+38   z               variable    Real        0     1     0     2       37    
 
 ===== BTAB (Block Table) =====
 idx  last    lpar    psze    vsze    
 -------------------------------------
-0    35      0       0       1       
+0    38      0       0       4       
 1    0       0       0       0       
 
 ===== ATAB (Array Table) =====

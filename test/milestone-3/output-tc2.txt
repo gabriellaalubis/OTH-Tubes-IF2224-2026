@@ -2,29 +2,42 @@
 ╔══════════════════════════════════════════════════╗
 ║           DECORATED ABSTRACT SYNTAX TREE         ║
 ╚══════════════════════════════════════════════════╝
-└── Program('TestParam')  →  type:Void tab:33 btab:2 lev:0 
+└── Program('TestBasicTypes')  →  type:Void tab:33 btab:1 lev:0 
     ├── Block('declarations')
-    │   └── ProcDecl('greet')  →  type:Void tab:34 btab:1 lev:1 
-    │       ├── IdentList('params')
-    │       │   ├── ParamDecl
-    │       │   │   ├── IdentList
-    │       │   │   │   └── VarRef('name')  →  type:String tab:35 lev:1 
-    │       │   │   └── TypeIdent('string')
-    │       │   └── ParamDecl
-    │       │       ├── IdentList
-    │       │       │   └── VarRef('age')  →  type:Integer tab:36 lev:1 
-    │       │       └── TypeIdent('integer')
-    │       └── Block
-    │           └── Block
-    │               ├── writeln(...)  →  type:Void tab:8 lev:0 
-    │               │   └── VarRef('name')  →  type:String tab:35 lev:1 
-    │               ├── writeln(...)  →  type:Void tab:8 lev:0 
-    │               │   └── VarRef('age')  →  type:Integer tab:36 lev:1 
-    │               └── EmptyStmt
-    └── Block  →  btab:2 lev:1 
-        ├── greet(...)  →  type:Void tab:34 lev:0 
-        │   ├── ConstString('Alice')  →  type:String 
-        │   └── ConstInt('25')  →  type:Integer 
+    │   ├── VarDecl('i')  →  type:Integer tab:34 lev:0 
+    │   ├── VarDecl('r')  →  type:Real tab:35 lev:0 
+    │   ├── VarDecl('c')  →  type:Char tab:36 lev:0 
+    │   └── VarDecl('b')  →  type:Boolean tab:37 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('i' := 42)  →  type:Void 
+        │   ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+        │   └── ConstInt('42')  →  type:Integer 
+        ├── Assign('r' := 3.14)  →  type:Void 
+        │   ├── VarRef('r')  →  type:Real tab:35 lev:0 
+        │   └── ConstReal('3.14')  →  type:Real 
+        ├── Assign('c' := A)  →  type:Void 
+        │   ├── VarRef('c')  →  type:Char tab:36 lev:0 
+        │   └── ConstChar('A')  →  type:Char 
+        ├── Assign('b' := 'true')  →  type:Void 
+        │   ├── VarRef('b')  →  type:Boolean tab:37 lev:0 
+        │   └── VarRef('true')  →  type:Boolean tab:6 lev:0 
+        ├── Assign('b' := 'i'>10)  →  type:Void 
+        │   ├── VarRef('b')  →  type:Boolean tab:37 lev:0 
+        │   └── BinOp('>')  →  type:Boolean 
+        │       ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+        │       └── ConstInt('10')  →  type:Integer 
+        ├── Assign('b' := 'i'=42)  →  type:Void 
+        │   ├── VarRef('b')  →  type:Boolean tab:37 lev:0 
+        │   └── BinOp('=')  →  type:Boolean 
+        │       ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+        │       └── ConstInt('42')  →  type:Integer 
+        ├── Assign('r' := 'i')  →  type:Void 
+        │   ├── VarRef('r')  →  type:Real tab:35 lev:0 
+        │   └── VarRef('i')  →  type:Integer tab:34 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('i')  →  type:Integer tab:34 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('r')  →  type:Real tab:35 lev:0 
         └── EmptyStmt
 
 ===== TAB (Identifier Table) =====
@@ -42,17 +55,17 @@ idx  name            obj         type        ref   nrm   lev   adr     link
 9    readln          procedure   Void        0     1     0     0       0     
 10   write           procedure   Void        0     1     0     0       0     
 11   read            procedure   Void        0     1     0     0       0     
-33   TestParam       program     Void        0     1     0     0       0     
-34   greet           procedure   Void        0     1     0     0       33    
-35   name            parameter   String      0     1     1     0       0     
-36   age             parameter   Integer     0     1     1     256     35    
+33   TestBasicTypes  program     Void        0     1     0     0       0     
+34   i               variable    Integer     0     1     0     0       33    
+35   r               variable    Real        0     1     0     1       34    
+36   c               variable    Char        0     1     0     3       35    
+37   b               variable    Boolean     0     1     0     4       36    
 
 ===== BTAB (Block Table) =====
 idx  last    lpar    psze    vsze    
 -------------------------------------
-0    34      0       0       0       
-1    36      36      257     0       
-2    0       0       0       0       
+0    37      0       0       5       
+1    0       0       0       0       
 
 ===== ATAB (Array Table) =====
   (kosong)

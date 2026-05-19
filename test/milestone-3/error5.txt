@@ -1,0 +1,7 @@
+program ErrUninitialized;
+var
+  x, y: integer;
+begin
+  y := x + 1;
+  writeln(y);
+end.

@@ -1,0 +1,11 @@
+program TestFunction;
+var
+  r: integer;
+function multiply(a: integer; b: integer): integer;
+begin
+  multiply := a * b;
+end;
+begin
+  r := multiply(6, 7);
+  writeln(r);
+end.

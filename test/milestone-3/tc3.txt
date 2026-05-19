@@ -1,8 +1,19 @@
-program TestSubrange;
-type
-  SmallNum == 1 .. 10;
+program TestConst;
+const
+  MAX == 100;
+  PI == 3.14;
 var
-  x: SmallNum;
+  x, y: integer;
+  z: real;
 begin
-  x := 5;
+  x := MAX;
+  y := x + 5;
+  y := x - 3;
+  y := x * 2;
+  z := x / 4;
+  y := x div 3;
+  y := x mod 7;
+  z := PI;
+  writeln(y);
+  writeln(z);
 end.

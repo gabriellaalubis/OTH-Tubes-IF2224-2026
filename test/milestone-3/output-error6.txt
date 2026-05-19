@@ -1,0 +1,1 @@
+[SEMANTIC ERROR] Procedure/function 'undeclaredProc' belum dideklarasikan.

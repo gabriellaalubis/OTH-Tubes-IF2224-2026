@@ -1,0 +1,9 @@
+program ErrDivReal;
+var
+  x: real;
+  y: integer;
+begin
+  x := 3.14;
+  y := 5;
+  y := y div x;
+end.

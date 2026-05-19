@@ -1,0 +1,66 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestRecord')  →  type:Void tab:33 btab:2 lev:0 
+    ├── Block('declarations')
+    │   ├── TypeDecl
+    │   │   └── TypeDecl('Point')  →  type:Record tab:36 
+    │   │       └── TypeRecord
+    │   │           └── Block('fields')
+    │   │               ├── FieldDecl
+    │   │               │   ├── IdentList
+    │   │               │   │   └── VarRef('x')  →  type:Integer tab:34 
+    │   │               │   └── TypeIdent('integer')
+    │   │               └── FieldDecl
+    │   │                   ├── IdentList
+    │   │                   │   └── VarRef('y')  →  type:Integer tab:35 
+    │   │                   └── TypeIdent('integer')
+    │   └── VarDecl('p')  →  type:Record tab:37 lev:0 
+    └── Block  →  btab:2 lev:1 
+        ├── Assign(x := 3)  →  type:Void 
+        │   ├── FieldAccess('x')  →  type:Integer tab:34 
+        │   │   └── VarRef('p')  →  type:Record tab:37 lev:0 
+        │   └── ConstInt('3')  →  type:Integer 
+        ├── Assign(y := 4)  →  type:Void 
+        │   ├── FieldAccess('y')  →  type:Integer tab:35 
+        │   │   └── VarRef('p')  →  type:Record tab:37 lev:0 
+        │   └── ConstInt('4')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── FieldAccess('x')  →  type:Integer tab:34 
+        │       └── VarRef('p')  →  type:Record tab:37 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── FieldAccess('y')  →  type:Integer tab:35 
+        │       └── VarRef('p')  →  type:Record tab:37 lev:0 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestRecord      program     Void        0     1     0     0       0     
+34   x               field       Integer     0     1     1     0       0     
+35   y               field       Integer     0     1     1     1       34    
+36   Point           type        Record      1     1     0     0       33    
+37   p               variable    Record      1     1     0     0       36    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    37      0       0       2       
+1    35      0       0       2       
+2    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

@@ -1,0 +1,9 @@
+program ErrTypeMismatch;
+var
+  x: integer;
+  b: boolean;
+begin
+  x := 5;
+  b := true;
+  x := b;
+end.

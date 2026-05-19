@@ -1,0 +1,12 @@
+program TestScope;
+var
+  globalVar: integer;
+procedure setGlobal(val: integer);
+begin
+  globalVar := val;
+end;
+begin
+  globalVar := 0;
+  setGlobal(99);
+  writeln(globalVar);
+end.

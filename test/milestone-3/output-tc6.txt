@@ -1,0 +1,79 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestArray')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── VarDecl('arr')  →  type:Array tab:34 lev:0 
+    │   └── VarDecl('i')  →  type:Integer tab:35 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign(ArrayAccess := 10)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │   │   └── ConstInt('1')  →  type:Integer 
+        │   └── ConstInt('10')  →  type:Integer 
+        ├── Assign(ArrayAccess := 20)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │   │   └── ConstInt('2')  →  type:Integer 
+        │   └── ConstInt('20')  →  type:Integer 
+        ├── Assign(ArrayAccess := ArrayAccess+ArrayAccess)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │   │   └── ConstInt('3')  →  type:Integer 
+        │   └── BinOp('+')  →  type:Integer 
+        │       ├── ArrayAccess  →  type:Integer 
+        │       │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │       │   └── ConstInt('2')  →  type:Integer 
+        │       └── ArrayAccess  →  type:Integer 
+        │           ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │           └── ConstInt('1')  →  type:Integer 
+        ├── Assign('i' := 3)  →  type:Void 
+        │   ├── VarRef('i')  →  type:Integer tab:35 lev:0 
+        │   └── ConstInt('3')  →  type:Integer 
+        ├── Assign(ArrayAccess := ArrayAccess+ArrayAccess)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │   │   └── VarRef('i')  →  type:Integer tab:35 lev:0 
+        │   └── BinOp('+')  →  type:Integer 
+        │       ├── ArrayAccess  →  type:Integer 
+        │       │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │       │   └── ConstInt('1')  →  type:Integer 
+        │       └── ArrayAccess  →  type:Integer 
+        │           ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │           └── ConstInt('2')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── ArrayAccess  →  type:Integer 
+        │       ├── VarRef('arr')  →  type:Array tab:34 lev:0 
+        │       └── ConstInt('3')  →  type:Integer 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestArray       program     Void        0     1     0     0       0     
+34   arr             variable    Array       0     1     0     0       33    
+35   i               variable    Integer     0     1     0     5       34    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    35      0       0       6       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+idx  xtyp        etyp        eref  low     high    elsz    size    
+-------------------------------------------------------------------
+0    Integer     Integer     0     1       5       1       5       

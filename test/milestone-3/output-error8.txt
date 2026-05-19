@@ -1,0 +1,1 @@
+[SEMANTIC ERROR] Kondisi while-statement harus bertipe Boolean.

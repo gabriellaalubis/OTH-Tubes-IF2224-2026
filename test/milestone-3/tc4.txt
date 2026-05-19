@@ -1,7 +1,22 @@
-program TestInit;
+program TestControl;
 var
   x, y: integer;
+  flag: boolean;
 begin
-  y := x + 5;
-  writeln(y);
+  x := 10;
+  y := 20;
+  flag := (x < y) and (y > 0);
+  if flag then
+  begin
+    x := x + 1;
+  end
+  else
+  begin
+    x := x - 1;
+  end;
+  if not flag then
+  begin
+    y := 0;
+  end;
+  writeln(x);
 end.

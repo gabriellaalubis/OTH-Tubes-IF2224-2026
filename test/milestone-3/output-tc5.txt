@@ -1,0 +1,59 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestWhile')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── VarDecl('i')  →  type:Integer tab:34 lev:0 
+    │   └── VarDecl('sum')  →  type:Integer tab:35 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('sum' := 0)  →  type:Void 
+        │   ├── VarRef('sum')  →  type:Integer tab:35 lev:0 
+        │   └── ConstInt('0')  →  type:Integer 
+        ├── Assign('i' := 1)  →  type:Void 
+        │   ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+        │   └── ConstInt('1')  →  type:Integer 
+        └── WhileStmt  →  type:Void 
+            ├── BinOp('<=')  →  type:Boolean 
+            │   ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+            │   └── ConstInt('5')  →  type:Integer 
+            └── Block
+                ├── Assign('sum' := 'sum'+'i')  →  type:Void 
+                │   ├── VarRef('sum')  →  type:Integer tab:35 lev:0 
+                │   └── BinOp('+')  →  type:Integer 
+                │       ├── VarRef('sum')  →  type:Integer tab:35 lev:0 
+                │       └── VarRef('i')  →  type:Integer tab:34 lev:0 
+                ├── Assign('i' := 'i'+1)  →  type:Void 
+                │   ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+                │   └── BinOp('+')  →  type:Integer 
+                │       ├── VarRef('i')  →  type:Integer tab:34 lev:0 
+                │       └── ConstInt('1')  →  type:Integer 
+                └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestWhile       program     Void        0     1     0     0       0     
+34   i               variable    Integer     0     1     0     0       33    
+35   sum             variable    Integer     0     1     0     1       34    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    35      0       0       2       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

@@ -1,0 +1,13 @@
+program TestCase;
+var
+  x, result: integer;
+begin
+  x := 2;
+  result := 0;
+  case x of
+    1: result := 10;
+    2: result := 20;
+    3: result := 30;
+  end;
+  writeln(result);
+end.

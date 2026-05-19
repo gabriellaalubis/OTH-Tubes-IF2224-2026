@@ -1,0 +1,12 @@
+program TestProcedure;
+var
+  result: integer;
+procedure add(a: integer; b: integer);
+begin
+  result := a + b;
+end;
+begin
+  result := 0;
+  add(10, 20);
+  writeln(result);
+end.

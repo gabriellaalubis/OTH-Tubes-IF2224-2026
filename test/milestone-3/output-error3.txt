@@ -1,0 +1,1 @@
+[SEMANTIC ERROR] Kondisi if-statement harus bertipe Boolean.

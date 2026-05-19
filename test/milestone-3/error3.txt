@@ -1,0 +1,10 @@
+program ErrIfNotBool;
+var
+  x: integer;
+begin
+  x := 5;
+  if x then
+  begin
+    x := 1;
+  end;
+end.

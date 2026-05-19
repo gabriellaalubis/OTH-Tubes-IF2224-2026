@@ -105,6 +105,7 @@ private:
     void visitForStmt   (const ASTPtr& n);
     void visitRepeatStmt(const ASTPtr& n);
     void visitCaseStmt  (const ASTPtr& n);
+    void visitCaseBlock  (const ASTPtr& n);
     void visitProcCall  (const ASTPtr& n);
 
     DataType visitExpr      (const ASTPtr& n);

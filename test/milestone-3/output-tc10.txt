@@ -1,0 +1,58 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestScope')  →  type:Void tab:33 btab:2 lev:0 
+    ├── Block('declarations')
+    │   ├── VarDecl('globalVar')  →  type:Integer tab:34 lev:0 
+    │   └── ProcDecl('setGlobal')  →  type:Void tab:35 btab:1 lev:1 
+    │       ├── IdentList('params')
+    │       │   └── ParamDecl
+    │       │       ├── IdentList
+    │       │       │   └── VarRef('val')  →  type:Integer tab:36 lev:1 
+    │       │       └── TypeIdent('integer')
+    │       └── Block
+    │           └── Block
+    │               ├── Assign('globalVar' := 'val')  →  type:Void 
+    │               │   ├── VarRef('globalVar')  →  type:Integer tab:34 lev:0 
+    │               │   └── VarRef('val')  →  type:Integer tab:36 lev:1 
+    │               └── EmptyStmt
+    └── Block  →  btab:2 lev:1 
+        ├── Assign('globalVar' := 0)  →  type:Void 
+        │   ├── VarRef('globalVar')  →  type:Integer tab:34 lev:0 
+        │   └── ConstInt('0')  →  type:Integer 
+        ├── setGlobal(...)  →  type:Void tab:35 lev:0 
+        │   └── ConstInt('99')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('globalVar')  →  type:Integer tab:34 lev:0 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestScope       program     Void        0     1     0     0       0     
+34   globalVar       variable    Integer     0     1     0     0       33    
+35   setGlobal       procedure   Void        0     1     0     0       34    
+36   val             parameter   Integer     0     1     1     0       0     
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    35      0       0       1       
+1    36      36      1       0       
+2    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

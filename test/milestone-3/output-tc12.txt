@@ -1,0 +1,56 @@
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('TestTypes')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── TypeDecl
+    │   │   ├── TypeDecl('SmallInt')  →  type:Subrange tab:34 
+    │   │   │   └── TypeSubrange
+    │   │   │       └── Range
+    │   │   │           ├── ConstInt('1')
+    │   │   │           └── ConstInt('10')
+    │   │   └── TypeDecl('Color')  →  type:Enumerated tab:35 
+    │   │       └── TypeEnumerated
+    │   │           ├── VarRef('Red')
+    │   │           ├── VarRef('Green')
+    │   │           └── VarRef('Blue')
+    │   ├── VarDecl('n')  →  type:Subrange tab:36 lev:0 
+    │   └── VarDecl('c')  →  type:Enumerated tab:37 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('n' := 5)  →  type:Void 
+        │   ├── VarRef('n')  →  type:Subrange tab:36 lev:0 
+        │   └── ConstInt('5')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('n')  →  type:Subrange tab:36 lev:0 
+        └── EmptyStmt
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   TestTypes       program     Void        0     1     0     0       0     
+34   SmallInt        type        Subrange    0     1     0     0       33    
+35   Color           type        Enumerated  0     1     0     0       34    
+36   n               variable    Subrange    0     1     0     0       35    
+37   c               variable    Enumerated  0     1     0     1       36    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    37      0       0       2       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

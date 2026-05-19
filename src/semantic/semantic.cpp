@@ -1039,6 +1039,11 @@ void SemanticAnalyser::visitVarDecl(const ASTPtr& n) {
     DataType dt = resolveTypeNode(typeNode);
     int ref = 0;
 
+    if (typeNode->kind == ASTNodeKind::TYPE_IDENT && dt == DataType::RECORD) {
+        int typeIdx = symtab_.lookup(typeNode->name);
+        if (typeIdx >= 0) ref = symtab_.tab()[typeIdx].ref;
+    }
+
     if (typeNode->kind == ASTNodeKind::TYPE_ARRAY) {
         ATabEntry ae;
         if (!typeNode->children.empty()) {
@@ -1088,9 +1093,41 @@ void SemanticAnalyser::visitTypeDecl(const ASTPtr& n) {
         semanticError("Tipe '" + n->name + "' sudah dideklarasikan.");
 
     DataType dt = DataType::NOTYPE;
-    if (!n->children.empty()) dt = resolveTypeNode(n->children[0]);
+    int ref = 0;
 
-    int idx = symtab_.addTab(n->name, ObjClass::TYPE_NAME, dt);
+    if (!n->children.empty() && n->children[0]->kind == ASTNodeKind::TYPE_RECORD) {
+        dt = DataType::RECORD;
+        int blockIdx = symtab_.enterBlock();
+        ref = blockIdx;
+        auto& fieldList = n->children[0]->children;
+        for (auto& fieldBlock : fieldList) {
+            if (!fieldBlock) continue;
+            for (auto& fieldDecl : fieldBlock->children) {
+                if (!fieldDecl || fieldDecl->kind != ASTNodeKind::FIELD_DECL) continue;
+                ASTPtr identList = nullptr;
+                ASTPtr typeNode  = nullptr;
+                for (auto& fc : fieldDecl->children) {
+                    if (fc->kind == ASTNodeKind::IDENT_LIST) identList = fc;
+                    else typeNode = fc;
+                }
+                if (!identList) continue;
+                DataType fdt = resolveTypeNode(typeNode);
+                int adr = symtab_.btab()[blockIdx].vsze;
+                for (auto& idNode : identList->children) {
+                    int tabIdx = symtab_.addTab(idNode->name, ObjClass::FIELD, fdt, 0, 1, adr);
+                    adr += symtab_.sizeOf(fdt);
+                    symtab_.btab()[blockIdx].vsze = adr;
+                    idNode->tabIndex = tabIdx;
+                    idNode->dataType = fdt;
+                }
+            }
+        }
+        symtab_.leaveBlock();
+    } else if (!n->children.empty()) {
+        dt = resolveTypeNode(n->children[0]);
+    }
+
+    int idx = symtab_.addTab(n->name, ObjClass::TYPE_NAME, dt, ref);
     n->tabIndex = idx;
     n->dataType = dt;
 }
@@ -1325,9 +1362,26 @@ void SemanticAnalyser::visitCaseStmt(const ASTPtr& n) {
     DataType exprType = visitExpr(n->children[0]);
     if (!isOrdinal(exprType))
         semanticError("Ekspresi case harus bertipe ordinal.");
-    for (size_t i = 1; i < n->children.size(); ++i)
-        visitStatement(n->children[i]);
+    for (size_t i = 1; i < n->children.size(); ++i) {
+        if (n->children[i]->kind == ASTNodeKind::CASE_BLOCK)
+            visitCaseBlock(n->children[i]);
+        else
+            visitStatement(n->children[i]);
+    }
     n->dataType = DataType::VOID;
+}
+
+void SemanticAnalyser::visitCaseBlock(const ASTPtr& n) {
+    for (auto& ch : n->children) {
+        if (ch->kind == ASTNodeKind::CASE_BLOCK)
+            visitCaseBlock(ch);
+        else if (ch->kind == ASTNodeKind::ASSIGN  ||
+                 ch->kind == ASTNodeKind::COMPOUND ||
+                 ch->kind == ASTNodeKind::PROC_CALL)
+            visitStatement(ch);
+        else
+            visitExpr(ch);
+    }
 }
 
 
@@ -1444,7 +1498,20 @@ DataType SemanticAnalyser::visitFuncCall(const ASTPtr& n) {
 
 DataType SemanticAnalyser::visitArrayAccess(const ASTPtr& n) {
     if (n->children.empty()) return DataType::NOTYPE;
-    DataType baseType = visitExpr(n->children[0]);
+    auto& base = n->children[0];
+    DataType baseType = DataType::NOTYPE;
+    if (base->kind == ASTNodeKind::VAR_REF) {
+        int idx = symtab_.lookup(base->name);
+        if (idx < 0)
+            semanticError("Identifier '" + base->name + "' belum dideklarasikan.");
+        auto& entry = symtab_.tab()[idx];
+        base->tabIndex = idx;
+        base->lexLevel = entry.lev;
+        base->dataType = entry.type;
+        baseType = entry.type;
+    } else {
+        baseType = visitExpr(base);
+    }
     if (baseType != DataType::ARRAY)
         semanticError("Variabel bukan array, tidak bisa diakses dengan indeks.");
 
@@ -1472,7 +1539,20 @@ DataType SemanticAnalyser::visitArrayAccess(const ASTPtr& n) {
 
 DataType SemanticAnalyser::visitFieldAccess(const ASTPtr& n) {
     if (n->children.empty()) return DataType::NOTYPE;
-    DataType baseType = visitExpr(n->children[0]);
+    auto& base = n->children[0];
+    DataType baseType = DataType::NOTYPE;
+    if (base->kind == ASTNodeKind::VAR_REF) {
+        int idx = symtab_.lookup(base->name);
+        if (idx < 0)
+            semanticError("Identifier '" + base->name + "' belum dideklarasikan.");
+        auto& entry = symtab_.tab()[idx];
+        base->tabIndex = idx;
+        base->lexLevel = entry.lev;
+        base->dataType = entry.type;
+        baseType = entry.type;
+    } else {
+        baseType = visitExpr(base);
+    }
     if (baseType != DataType::RECORD)
         semanticError("Variabel bukan record, tidak bisa diakses fieldnya.");
 
