@@ -468,6 +468,7 @@ Token Lexer::nextToken() {
         }
 
         case S_EQL: {
+            if (c == '=') return {EQL, "", tokLine, tokCol};
             setPending(c);
             return {EQL, "", tokLine, tokCol};
         }

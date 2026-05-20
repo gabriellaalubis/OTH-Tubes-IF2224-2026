@@ -18,9 +18,9 @@
         ├── Assign('c' := A)  →  type:Void 
         │   ├── VarRef('c')  →  type:Char tab:36 lev:0 
         │   └── ConstChar('A')  →  type:Char 
-        ├── Assign('b' := 'true')  →  type:Void 
+        ├── Assign('b' := true)  →  type:Void 
         │   ├── VarRef('b')  →  type:Boolean tab:37 lev:0 
-        │   └── VarRef('true')  →  type:Boolean tab:6 lev:0 
+        │   └── ConstBool('true')  →  type:Boolean 
         ├── Assign('b' := 'i'>10)  →  type:Void 
         │   ├── VarRef('b')  →  type:Boolean tab:37 lev:0 
         │   └── BinOp('>')  →  type:Boolean 
