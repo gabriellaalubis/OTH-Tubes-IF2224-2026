@@ -11,7 +11,6 @@ SemanticAnalyser::SemanticAnalyser() {}
 ASTPtr SemanticAnalyser::analyse(const NodePtr& parseRoot) {
     ast_ = buildAST(parseRoot);
 
-    // Tahap 2: dekorasi AST
     if (ast_) visitProgram(ast_);
 
     return ast_;
@@ -138,7 +137,6 @@ ASTPtr SemanticAnalyser::buildAST(const NodePtr& n) {
 
 
 ASTPtr SemanticAnalyser::buildProgram(const NodePtr& n) {
-    // children: <program-header>, <declaration-part>, <compound-statement>, PERIOD
     std::string progName;
     for (auto& ch : n->children) {
         if (ch->label == "<program-header>") {
@@ -166,6 +164,7 @@ ASTPtr SemanticAnalyser::buildProgram(const NodePtr& n) {
 }
 
 // Kumpulkan semua deklarasi
+
 ASTPtr SemanticAnalyser::buildDeclPart(const NodePtr& n) {
     auto node = makeNode(ASTNodeKind::BLOCK, "declarations");
     for (auto& ch : n->children) {
@@ -222,7 +221,7 @@ ASTPtr SemanticAnalyser::buildVarDecl(const NodePtr& n) {
             typeNode = buildType(ch[i]); i++;
         }
         if (i < ch.size() && labelStartsWith(ch[i], "SEMICOLON")) i++; 
-        // Flat style: tiap identifier jadi satu VarDecl(name).
+        // Setiap identifier jadi satu VarDecl(name).
         if (identList) {
             for (auto& idNode : identList->children) {
                 auto entry = makeNode(ASTNodeKind::VAR_DECL, idNode->name);
@@ -316,7 +315,6 @@ ASTPtr SemanticAnalyser::buildFuncDecl(const NodePtr& n) {
     }
 
     auto node = makeNode(ASTNodeKind::FUNC_DECL, name);
-    // simpan tipe kembalian sebagai child TYPE_IDENT
     auto retType = makeNode(ASTNodeKind::TYPE_IDENT, retTypeName);
     node->children.push_back(retType);
     if (params) node->children.push_back(params);
@@ -371,8 +369,7 @@ ASTPtr SemanticAnalyser::buildParamGroup(const NodePtr& n) {
 
 
 ASTPtr SemanticAnalyser::buildType(const NodePtr& n) {
-    // <type> bisa punya 1 child: array-type, enumerated, record-type,
-    // range, atau IDENT tunggal
+    // <type> bisa punya 1 child: array-type, enumerated, record-type, range, atau IDENT tunggal
     if (n->children.empty()) return makeNode(ASTNodeKind::TYPE_IDENT, "");
 
     auto& first = n->children[0];
@@ -393,7 +390,7 @@ ASTPtr SemanticAnalyser::buildType(const NodePtr& n) {
 ASTPtr SemanticAnalyser::buildArrayType(const NodePtr& n) {
     auto node = makeNode(ASTNodeKind::TYPE_ARRAY);
     for (auto& ch : n->children) {
-        // skip keyword ARRAY, '[', ']', OF
+        // Skip keyword ARRAY, '[', ']', OF
         if (labelStartsWith(ch, "ARRAYSY") ||
             labelStartsWith(ch, "LBRACK")  ||
             labelStartsWith(ch, "RBRACK")  ||
@@ -404,7 +401,6 @@ ASTPtr SemanticAnalyser::buildArrayType(const NodePtr& n) {
         } else if (ch->label == "<type>") {
             node->children.push_back(buildType(ch));
         } else if (labelStartsWith(ch, "IDENT")) {
-            // tipe indeks berupa named type
             node->children.push_back(makeNode(ASTNodeKind::TYPE_IDENT, valueOf(ch)));
         }
     }
@@ -479,7 +475,6 @@ ASTPtr SemanticAnalyser::buildCompound(const NodePtr& n) {
         if (ch->label == "<statement-list>") {
             ASTPtr sl = buildStmtList(ch);
             if (sl) {
-                // tambahkan masing-masing statement langsung ke COMPOUND
                 for (auto& s : sl->children)
                     node->children.push_back(s);
             }
@@ -697,7 +692,6 @@ ASTPtr SemanticAnalyser::buildExpression(const NodePtr& n) {
         else if (ch->label == "<relational-operator>") {
             if (!ch->children.empty()) op = ch->children[0]->label;
             std::transform(op.begin(), op.end(), op.begin(), ::tolower);
-            // ekstrak operator tunggal dari label seperti "EQL", "NEQ", dsb
             if (op == "eql") op = "=";
             else if (op == "neq") op = "<>";
             else if (op == "lss") op = "<";
@@ -721,7 +715,7 @@ ASTPtr SemanticAnalyser::buildExpression(const NodePtr& n) {
 
 ASTPtr SemanticAnalyser::buildSimpleExpr(const NodePtr& n) {
     std::string unarySign;
-    std::vector<std::pair<std::string, ASTPtr>> terms; // (op, term)
+    std::vector<std::pair<std::string, ASTPtr>> terms; 
 
     std::string pendingOp = "";
     for (auto& ch : n->children) {
@@ -759,7 +753,6 @@ ASTPtr SemanticAnalyser::buildSimpleExpr(const NodePtr& n) {
         result = neg;
     }
 
-    // Lipat dari kiri ke kanan
     for (size_t i = 1; i < terms.size(); ++i) {
         auto binop = makeNode(ASTNodeKind::BINOP, terms[i].first);
         binop->children.push_back(result);
@@ -818,15 +811,14 @@ ASTPtr SemanticAnalyser::buildFactor(const NodePtr& n) {
     if (labelStartsWith(first, "FALSESY")) return makeNode(ASTNodeKind::CONST_BOOL,   "false");
 
     // Variabel atau function call
-    if (lbl == "<variable>")               return buildVariable(first);
+    if (lbl == "<variable>") return buildVariable(first);
     if (lbl == "<procedure/function-call>") {
-        // function call dalam ekspresi
         auto fc = buildProcCall(first);
         fc->kind = ASTNodeKind::FUNC_CALL;
         return fc;
     }
 
-    // Ekspresi dalam kurung: ( <expression> )
+    // Ekspresi dalam kurung ( <expression> )
     if (labelStartsWith(first, "LPARENT")) {
         if (n->children.size() >= 2)
             return buildExpression(n->children[1]);
@@ -854,7 +846,6 @@ ASTPtr SemanticAnalyser::buildVariable(const NodePtr& n) {
             base = makeNode(ASTNodeKind::VAR_REF, name);
         } else if (ch->label == "<component-variable>") {
             if (!base) continue;
-            // LBRACK → array access; PERIOD → field access
             bool isArray = false, isField = false;
             std::string fieldName;
             for (auto& cv : ch->children) {
@@ -923,13 +914,13 @@ ASTPtr SemanticAnalyser::buildConstant(const NodePtr& n) {
 void SemanticAnalyser::visitProgram(const ASTPtr& n) {
     if (!n) return;
 
-    // Masukkan nama program ke tab
+    // Masukkin nama program ke tab
     int idx = symtab_.addTab(n->name, ObjClass::PROGRAM, DataType::VOID);
     n->tabIndex  = idx;
     n->lexLevel  = 0;
     n->dataType  = DataType::VOID;
 
-    // 1) deklarasi global tetap di level 0
+    // Deklarasi global tetap di level 0
     for (auto& ch : n->children) {
         if (!ch) continue;
         if (ch->kind == ASTNodeKind::BLOCK && ch->name == "declarations") {
@@ -937,7 +928,7 @@ void SemanticAnalyser::visitProgram(const ASTPtr& n) {
         }
     }
 
-    // 2) body program dijalankan dalam blok sendiri (main block)
+    // Body program dijalankan dalam blok sendiri (main block)
     int mainBlockIdx = symtab_.enterBlock();
     n->blockIndex = mainBlockIdx;
 
@@ -984,7 +975,6 @@ void SemanticAnalyser::visitConstDecl(const ASTPtr& n) {
         return;
     }
 
-    // Cek redeklaasi
     if (symtab_.lookupCurrentBlock(n->name) >= 0)
         semanticError("Identifier '" + n->name + "' sudah dideklarasikan dalam scope ini.");
 
@@ -1003,7 +993,6 @@ void SemanticAnalyser::visitConstDecl(const ASTPtr& n) {
 
 
 void SemanticAnalyser::visitVarDecl(const ASTPtr& n) {
-    // Container: kunjungi setiap entry VarDecl.
     if (n->name.empty()) {
         for (auto& ch : n->children) {
             if (ch && ch->kind == ASTNodeKind::VAR_DECL) visitVarDecl(ch);
@@ -1011,7 +1000,6 @@ void SemanticAnalyser::visitVarDecl(const ASTPtr& n) {
         return;
     }
 
-    // Fallback kompatibilitas format lama (group berisi IDENT_LIST).
     ASTPtr legacyIdentList = nullptr;
     ASTPtr legacyTypeNode = nullptr;
     for (auto& ch : n->children) {
@@ -1085,7 +1073,7 @@ void SemanticAnalyser::visitVarDecl(const ASTPtr& n) {
     n->tabIndex = tabIdx;
     n->lexLevel = symtab_.currentLevel();
     n->dataType = dt;
-    // Biar output AST ringkas seperti contoh, detail tipe tidak dicetak lagi sebagai child.
+    // Detail tipe tidak dicetak lagi sebagai child
     n->children.clear();
 }
 
@@ -1156,7 +1144,7 @@ void SemanticAnalyser::visitProcDecl(const ASTPtr& n) {
     if (symtab_.lookupCurrentBlock(n->name) >= 0)
         semanticError("Procedure '" + n->name + "' sudah dideklarasikan.");
 
-    // Daftarkan procedure ke tab (sebelum masuk blok agar rekursi boleh)
+    // Mendaftarkan procedure ke tab 
     int procIdx = symtab_.addTab(n->name, ObjClass::PROCEDURE, DataType::VOID);
     n->tabIndex = procIdx;
     n->dataType = DataType::VOID;
@@ -1301,11 +1289,9 @@ void SemanticAnalyser::visitAssign(const ASTPtr& n) {
         target->dataType = entry.type;
         targetType = entry.type;
     } else {
-        // target berupa array access atau field access — cek tipe via visitExpr biasa
         targetType = visitExpr(target);
     }
 
-    // value  (children[1])
     DataType valueType  = visitExpr(n->children[1]);
 
     if (!isAssignmentCompatible(targetType, valueType)) {
@@ -1369,7 +1355,6 @@ void SemanticAnalyser::visitForStmt(const ASTPtr& n) {
 
 void SemanticAnalyser::visitRepeatStmt(const ASTPtr& n) {
     if (n->children.empty()) return;
-    // Semua child kecuali terakhir adalah statement; terakhir adalah kondisi
     for (size_t i = 0; i + 1 < n->children.size(); ++i)
         visitStatement(n->children[i]);
     DataType condType = visitExpr(n->children.back());
@@ -1420,7 +1405,6 @@ void SemanticAnalyser::visitProcCall(const ASTPtr& n) {
     n->lexLevel = entry.lev;
     n->dataType = entry.type;
 
-    // Kunjungi argumen
     for (auto& arg : n->children) visitExpr(arg);
 }
 
@@ -1537,17 +1521,14 @@ DataType SemanticAnalyser::visitArrayAccess(const ASTPtr& n) {
     if (baseType != DataType::ARRAY)
         semanticError("Variabel bukan array, tidak bisa diakses dengan indeks.");
 
-    // Dapatkan tipe elemen dari atab
     int arrRef = -1;
     auto& baseNode = n->children[0];
     if (baseNode->kind == ASTNodeKind::VAR_REF && baseNode->tabIndex >= 0) {
         arrRef = symtab_.tab()[baseNode->tabIndex].ref;
     } else if (baseNode->kind == ASTNodeKind::ARRAY_ACCESS) {
-        // base adalah hasil akses array — eref di atab menunjuk ke tipe elemen (array dalam array)
         if (baseNode->tabIndex >= 0) {
             arrRef = symtab_.tab()[baseNode->tabIndex].ref;
         } else {
-            // cari dari atab lewat tipe elemen base
             int baseRef = -1;
             auto& grandBase = baseNode->children[0];
             if (grandBase->tabIndex >= 0)
@@ -1561,7 +1542,6 @@ DataType SemanticAnalyser::visitArrayAccess(const ASTPtr& n) {
     if (arrRef >= 0 && arrRef < (int)symtab_.atab().size())
         elemType = symtab_.atab()[arrRef].etyp;
 
-    // Cek tipe indeks
     for (size_t i = 1; i < n->children.size(); ++i) {
         DataType idxType = visitExpr(n->children[i]);
         if (!isOrdinal(idxType))
@@ -1599,7 +1579,7 @@ DataType SemanticAnalyser::visitFieldAccess(const ASTPtr& n) {
 
     int fieldIdx = -1;
     if (recRef >= 0 && recRef < (int)symtab_.btab().size()) {
-        // cari field dalam blok record
+        // Cari field dalam blok record
         int cur = symtab_.btab()[recRef].last;
         while (cur > 0) {
             std::string fname = symtab_.tab()[cur].name;
@@ -1660,7 +1640,7 @@ DataType SemanticAnalyser::resolveTypeNode(const ASTPtr& n) {
 
 bool SemanticAnalyser::isCompatible(DataType t1, DataType t2) const {
     if (t1 == t2) return true;
-    if (t1 == DataType::NOTYPE || t2 == DataType::NOTYPE) return true; // beri keringanan
+    if (t1 == DataType::NOTYPE || t2 == DataType::NOTYPE) return true; 
     if (t1 == DataType::SUBRANGE || t2 == DataType::SUBRANGE) return true;
     return false;
 }
@@ -1689,13 +1669,13 @@ bool SemanticAnalyser::isOrdinal(DataType dt) const {
 
 DataType SemanticAnalyser::resultTypeOfBinOp(const std::string& op,
                                               DataType l, DataType r) const {
-    // Operator relasional → Boolean
+    // Operator relasional --> Boolean
     if (op == "=" || op == "<>" || op == "<" || op == ">" ||
         op == "<=" || op == ">=") {
         if (isCompatible(l, r)) return DataType::BOOLEAN;
         return DataType::UNKNOWN;
     }
-    // Operator logika → Boolean
+    // Operator logika --> Boolean
     if (op == "and" || op == "or") {
         if (l == DataType::BOOLEAN && r == DataType::BOOLEAN)
             return DataType::BOOLEAN;
@@ -1725,7 +1705,7 @@ DataType SemanticAnalyser::resultTypeOfBinOp(const std::string& op,
             return DataType::INTEGER;
         return DataType::UNKNOWN;
     }
-    // Tipe NOTYPE dibiarkan lewat (toleransi)
+    // Tipe NOTYPE dibiarkan 
     if (l == DataType::NOTYPE || r == DataType::NOTYPE) return DataType::NOTYPE;
     return DataType::UNKNOWN;
 }
