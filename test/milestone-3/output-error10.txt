@@ -1,0 +1,1 @@
+[SEMANTIC ERROR] Assignment tidak kompatibel: target bertipe 'Enumerated', nilai bertipe 'Integer'.

@@ -5,7 +5,8 @@
 └── Program('TestArray')  →  type:Void tab:33 btab:1 lev:0 
     ├── Block('declarations')
     │   ├── VarDecl('arr')  →  type:Array tab:34 lev:0 
-    │   └── VarDecl('i')  →  type:Integer tab:35 lev:0 
+    │   ├── VarDecl('matrix')  →  type:Array tab:35 lev:0 
+    │   └── VarDecl('i')  →  type:Integer tab:36 lev:0 
     └── Block  →  btab:1 lev:1 
         ├── Assign(ArrayAccess := 10)  →  type:Void 
         │   ├── ArrayAccess  →  type:Integer 
@@ -29,12 +30,12 @@
         │           ├── VarRef('arr')  →  type:Array tab:34 lev:0 
         │           └── ConstInt('1')  →  type:Integer 
         ├── Assign('i' := 3)  →  type:Void 
-        │   ├── VarRef('i')  →  type:Integer tab:35 lev:0 
+        │   ├── VarRef('i')  →  type:Integer tab:36 lev:0 
         │   └── ConstInt('3')  →  type:Integer 
         ├── Assign(ArrayAccess := ArrayAccess+ArrayAccess)  →  type:Void 
         │   ├── ArrayAccess  →  type:Integer 
         │   │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
-        │   │   └── VarRef('i')  →  type:Integer tab:35 lev:0 
+        │   │   └── VarRef('i')  →  type:Integer tab:36 lev:0 
         │   └── BinOp('+')  →  type:Integer 
         │       ├── ArrayAccess  →  type:Integer 
         │       │   ├── VarRef('arr')  →  type:Array tab:34 lev:0 
@@ -46,6 +47,26 @@
         │   └── ArrayAccess  →  type:Integer 
         │       ├── VarRef('arr')  →  type:Array tab:34 lev:0 
         │       └── ConstInt('3')  →  type:Integer 
+        ├── Assign(ArrayAccess := 99)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── ArrayAccess  →  type:Array 
+        │   │   │   ├── VarRef('matrix')  →  type:Array tab:35 lev:0 
+        │   │   │   └── ConstInt('1')  →  type:Integer 
+        │   │   └── ConstInt('1')  →  type:Integer 
+        │   └── ConstInt('99')  →  type:Integer 
+        ├── Assign(ArrayAccess := 42)  →  type:Void 
+        │   ├── ArrayAccess  →  type:Integer 
+        │   │   ├── ArrayAccess  →  type:Array 
+        │   │   │   ├── VarRef('matrix')  →  type:Array tab:35 lev:0 
+        │   │   │   └── ConstInt('2')  →  type:Integer 
+        │   │   └── ConstInt('3')  →  type:Integer 
+        │   └── ConstInt('42')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── ArrayAccess  →  type:Integer 
+        │       ├── ArrayAccess  →  type:Array 
+        │       │   ├── VarRef('matrix')  →  type:Array tab:35 lev:0 
+        │       │   └── ConstInt('1')  →  type:Integer 
+        │       └── ConstInt('1')  →  type:Integer 
         └── EmptyStmt
 
 ===== TAB (Identifier Table) =====
@@ -65,15 +86,17 @@ idx  name            obj         type        ref   nrm   lev   adr     link
 11   read            procedure   Void        0     1     0     0       0     
 33   TestArray       program     Void        0     1     0     0       0     
 34   arr             variable    Array       0     1     0     0       33    
-35   i               variable    Integer     0     1     0     5       34    
+35   matrix          variable    Array       1     1     0     5       34    
+36   i               variable    Integer     0     1     0     20      35    
 
 ===== BTAB (Block Table) =====
 idx  last    lpar    psze    vsze    
 -------------------------------------
-0    35      0       0       6       
+0    36      0       0       21      
 1    0       0       0       0       
 
 ===== ATAB (Array Table) =====
 idx  xtyp        etyp        eref  low     high    elsz    size    
 -------------------------------------------------------------------
 0    Integer     Integer     0     1       5       1       5       
+1    Integer     Array       0     1       3       5       15      

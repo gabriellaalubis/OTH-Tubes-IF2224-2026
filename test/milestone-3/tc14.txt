@@ -1,0 +1,10 @@
+program TestEnum;
+type
+  Color == (Red, Green, Blue);
+var
+  c: Color;
+begin
+  c := Red;
+  c := Green;
+  c := Blue;
+end.

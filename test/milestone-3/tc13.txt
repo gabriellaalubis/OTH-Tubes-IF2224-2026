@@ -1,0 +1,12 @@
+program TestGlobalMutate;
+var
+  x: integer;
+procedure increment;
+begin
+  x := x + 1;
+end;
+begin
+  x := 0;
+  increment;
+  writeln(x);
+end.

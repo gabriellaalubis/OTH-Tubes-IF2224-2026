@@ -1129,6 +1129,19 @@ void SemanticAnalyser::visitTypeDecl(const ASTPtr& n) {
             }
         }
         symtab_.leaveBlock();
+    } else if (!n->children.empty() && n->children[0]->kind == ASTNodeKind::TYPE_ENUMERATED) {
+        dt = DataType::ENUMERATED;
+        int adr = 0;
+        for (auto& member : n->children[0]->children) {
+            if (member->kind != ASTNodeKind::VAR_REF) continue;
+            if (symtab_.lookupCurrentBlock(member->name) >= 0)
+                semanticError("Enum member '" + member->name + "' sudah dideklarasikan.");
+            int tabIdx = symtab_.addTab(member->name, ObjClass::CONSTANT, DataType::ENUMERATED, 0, 1, adr);
+            symtab_.tab()[tabIdx].initialized = true;
+            adr++;
+            member->tabIndex = tabIdx;
+            member->dataType = DataType::ENUMERATED;
+        }
     } else if (!n->children.empty()) {
         dt = resolveTypeNode(n->children[0]);
     }
@@ -1169,6 +1182,9 @@ void SemanticAnalyser::visitProcDecl(const ASTPtr& n) {
                 for (auto& idNode : identList->children) {
                     if (symtab_.lookupCurrentBlock(idNode->name) >= 0)
                         semanticError("Parameter '" + idNode->name + "' sudah dideklarasikan.");
+                    int globalIdx = symtab_.lookup(idNode->name);
+                    if (globalIdx >= 0 && (symtab_.tab()[globalIdx].obj == ObjClass::VARIABLE || symtab_.tab()[globalIdx].obj == ObjClass::CONSTANT))
+                        semanticError("Parameter '" + idNode->name + "' konflik dengan identifier global yang sudah dideklarasikan.");
                     int varSize = symtab_.sizeOf(dt);
                     int tabIdx = symtab_.addTab(idNode->name, ObjClass::PARAMETER, dt, 0, 1, adrOffset);
                     symtab_.tab()[tabIdx].initialized = true;
@@ -1480,7 +1496,7 @@ DataType SemanticAnalyser::visitVarRef(const ASTPtr& n) {
     n->lexLevel  = entry.lev;
     n->dataType  = entry.type;
 
-    if (entry.obj == ObjClass::VARIABLE && !entry.initialized)
+    if (entry.obj == ObjClass::VARIABLE && !entry.initialized && entry.lev == symtab_.currentLevel())
         semanticError("Variabel tidak bisa dioperasikan jika belum diinisialisasi dengan nilai.");
 
     return entry.type;
@@ -1523,8 +1539,22 @@ DataType SemanticAnalyser::visitArrayAccess(const ASTPtr& n) {
 
     // Dapatkan tipe elemen dari atab
     int arrRef = -1;
-    if (!n->children.empty() && n->children[0]->tabIndex >= 0) {
-        arrRef = symtab_.tab()[n->children[0]->tabIndex].ref;
+    auto& baseNode = n->children[0];
+    if (baseNode->kind == ASTNodeKind::VAR_REF && baseNode->tabIndex >= 0) {
+        arrRef = symtab_.tab()[baseNode->tabIndex].ref;
+    } else if (baseNode->kind == ASTNodeKind::ARRAY_ACCESS) {
+        // base adalah hasil akses array — eref di atab menunjuk ke tipe elemen (array dalam array)
+        if (baseNode->tabIndex >= 0) {
+            arrRef = symtab_.tab()[baseNode->tabIndex].ref;
+        } else {
+            // cari dari atab lewat tipe elemen base
+            int baseRef = -1;
+            auto& grandBase = baseNode->children[0];
+            if (grandBase->tabIndex >= 0)
+                baseRef = symtab_.tab()[grandBase->tabIndex].ref;
+            if (baseRef >= 0 && baseRef < (int)symtab_.atab().size())
+                arrRef = symtab_.atab()[baseRef].eref;
+        }
     }
 
     DataType elemType = DataType::NOTYPE;

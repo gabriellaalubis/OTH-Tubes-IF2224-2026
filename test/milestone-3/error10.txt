@@ -1,0 +1,10 @@
+program ErrEnumMismatch;
+type
+  Color == (Red, Green, Blue);
+var
+  c: Color;
+  x: integer;
+begin
+  x := 5;
+  c := x;
+end.

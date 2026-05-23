@@ -2,27 +2,25 @@
 ╔══════════════════════════════════════════════════╗
 ║           DECORATED ABSTRACT SYNTAX TREE         ║
 ╚══════════════════════════════════════════════════╝
-└── Program('TestTypes')  →  type:Void tab:33 btab:1 lev:0 
+└── Program('TestEnum')  →  type:Void tab:33 btab:1 lev:0 
     ├── Block('declarations')
     │   ├── TypeDecl
-    │   │   ├── TypeDecl('SmallInt')  →  type:Subrange tab:34 
-    │   │   │   └── TypeSubrange
-    │   │   │       └── Range
-    │   │   │           ├── ConstInt('1')
-    │   │   │           └── ConstInt('10')
-    │   │   └── TypeDecl('Color')  →  type:Enumerated tab:38 
+    │   │   └── TypeDecl('Color')  →  type:Enumerated tab:37 
     │   │       └── TypeEnumerated
-    │   │           ├── VarRef('Red')  →  type:Enumerated tab:35 
-    │   │           ├── VarRef('Green')  →  type:Enumerated tab:36 
-    │   │           └── VarRef('Blue')  →  type:Enumerated tab:37 
-    │   ├── VarDecl('n')  →  type:Subrange tab:39 lev:0 
-    │   └── VarDecl('c')  →  type:Enumerated tab:40 lev:0 
+    │   │           ├── VarRef('Red')  →  type:Enumerated tab:34 
+    │   │           ├── VarRef('Green')  →  type:Enumerated tab:35 
+    │   │           └── VarRef('Blue')  →  type:Enumerated tab:36 
+    │   └── VarDecl('c')  →  type:Enumerated tab:38 lev:0 
     └── Block  →  btab:1 lev:1 
-        ├── Assign('n' := 5)  →  type:Void 
-        │   ├── VarRef('n')  →  type:Subrange tab:39 lev:0 
-        │   └── ConstInt('5')  →  type:Integer 
-        ├── writeln(...)  →  type:Void tab:8 lev:0 
-        │   └── VarRef('n')  →  type:Subrange tab:39 lev:0 
+        ├── Assign('c' := 'Red')  →  type:Void 
+        │   ├── VarRef('c')  →  type:Enumerated tab:38 lev:0 
+        │   └── VarRef('Red')  →  type:Enumerated tab:34 lev:0 
+        ├── Assign('c' := 'Green')  →  type:Void 
+        │   ├── VarRef('c')  →  type:Enumerated tab:38 lev:0 
+        │   └── VarRef('Green')  →  type:Enumerated tab:35 lev:0 
+        ├── Assign('c' := 'Blue')  →  type:Void 
+        │   ├── VarRef('c')  →  type:Enumerated tab:38 lev:0 
+        │   └── VarRef('Blue')  →  type:Enumerated tab:36 lev:0 
         └── EmptyStmt
 
 ===== TAB (Identifier Table) =====
@@ -40,19 +38,17 @@ idx  name            obj         type        ref   nrm   lev   adr     link
 9    readln          procedure   Void        0     1     0     0       0     
 10   write           procedure   Void        0     1     0     0       0     
 11   read            procedure   Void        0     1     0     0       0     
-33   TestTypes       program     Void        0     1     0     0       0     
-34   SmallInt        type        Subrange    0     1     0     0       33    
-35   Red             constant    Enumerated  0     1     0     0       34    
-36   Green           constant    Enumerated  0     1     0     1       35    
-37   Blue            constant    Enumerated  0     1     0     2       36    
-38   Color           type        Enumerated  0     1     0     0       37    
-39   n               variable    Subrange    0     1     0     0       38    
-40   c               variable    Enumerated  0     1     0     1       39    
+33   TestEnum        program     Void        0     1     0     0       0     
+34   Red             constant    Enumerated  0     1     0     0       33    
+35   Green           constant    Enumerated  0     1     0     1       34    
+36   Blue            constant    Enumerated  0     1     0     2       35    
+37   Color           type        Enumerated  0     1     0     0       36    
+38   c               variable    Enumerated  0     1     0     0       37    
 
 ===== BTAB (Block Table) =====
 idx  last    lpar    psze    vsze    
 -------------------------------------
-0    40      0       0       2       
+0    38      0       0       1       
 1    0       0       0       0       
 
 ===== ATAB (Array Table) =====

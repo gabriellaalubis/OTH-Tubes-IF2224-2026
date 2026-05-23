@@ -1,6 +1,7 @@
 program TestArray;
 var
   arr: array[1 .. 5] of integer;
+  matrix: array[1 .. 3] of array[1 .. 3] of integer;
   i: integer;
 begin
   arr[1] := 10;
@@ -9,4 +10,7 @@ begin
   i := 3;
   arr[i] := arr[1] + arr[2];
   writeln(arr[3]);
+  matrix[1][1] := 99;
+  matrix[2][3] := 42;
+  writeln(matrix[1][1]);
 end.

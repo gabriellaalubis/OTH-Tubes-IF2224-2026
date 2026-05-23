@@ -1,0 +1,11 @@
+program ErrParamConflict;
+var
+  x: integer;
+procedure setVal(x: integer);
+begin
+  x := x + 1;
+end;
+begin
+  x := 5;
+  setVal(10);
+end.

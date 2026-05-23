@@ -1,7 +1,13 @@
 program ErrUninitialized;
 var
-  x, y: integer;
+  result: integer;
+procedure compute;
+var
+  local: integer;
 begin
-  y := x + 1;
-  writeln(y);
+  result := local + 1;
+end;
+begin
+  compute;
+  writeln(result);
 end.
