@@ -24,10 +24,10 @@ void printSeparator() {
 int main(int argc, char* argv[]) {
     string inputPath;
     std::cout << "\n";
-    std::cout << "╔══════════════════════════════════════════════════╗\n";
-    std::cout << "║                 ARION COMPILER                   ║\n";
-    std::cout << "║     Lexical Analyzer  +  Syntax Analyzer         ║\n";
-    std::cout << "╚══════════════════════════════════════════════════╝\n";
+    std::cout << "╔══════════════════════════════════════════════════════════╗\n";
+    std::cout << "║                      ARION COMPILER                      ║\n";
+    std::cout << "║  Lexical Analyzer + Syntax Analyzer + Semantic Analyzer  ║\n";
+    std::cout << "╚══════════════════════════════════════════════════════════╝\n";
     std::cout << "\n";
     cout << "Masukkan path file input (.txt): ";
     getline(cin, inputPath);

@@ -1,6 +1,7 @@
 # Arion Compiler
 Milestone 1 - Lexical Analysis  
 Milestone 2 - Syntax Analysis (Parse Tree)
+Milestone 3 - Semantic Analysis (Decorated AST)
 
 ## Identitas Kelompok
 
@@ -13,9 +14,10 @@ Reva Natania Sitohang - 13524098
 
 ## Deskripsi Program
 
-Arion Compiler adalah program untuk menganalisis kode sumber bahasa Arion dalam dua tahap:
+Arion Compiler adalah program untuk menganalisis kode sumber bahasa Arion dalam tiga tahap:
 1. **Lexical Analysis (Milestone 1)** menggunakan **Deterministic Finite Automata (DFA)** untuk menghasilkan token.
 2. **Syntax Analysis (Milestone 2)** menggunakan **recursive-descent parser** untuk membangun parse tree dan memvalidasi struktur program.
+3. **Semantic Analysis (Milestone 3)** menggunakan **attributed grammar** untuk membangun decorated AST, mengelola symbol table, dan melakukan type & scope checking.
 
 ### Fitur Utama Milestone 1 (Lexer)
 
@@ -31,7 +33,7 @@ Arion Compiler adalah program untuk menganalisis kode sumber bahasa Arion dalam 
 4. Menangani syntax error dengan pesan yang informatif (line/col dan token yang diharapkan).
 5. Memvalidasi urutan deklarasi (`const -> type -> var -> subprogram`).
 
-### Cakupan Grammar Milestone 2
+#### Cakupan Grammar Milestone 2
 
 Parser menangani konstruksi utama berikut:
 - `program ... ; ... begin ... end .`
@@ -41,6 +43,24 @@ Parser menangani konstruksi utama berikut:
 - Statement: assignment, procedure/function call, compound statement
 - Control flow: `if`, `case`, `while`, `repeat-until`, `for ... to/downto`
 - Ekspresi: relational, additive, multiplicative, unary (`+`, `-`, `not`)
+
+### Fitur Utama Milestone 3 (Semantic Analyser)
+
+1. Menerima parse tree dari parser dan melakukan konversi ke **Abstract Syntax Tree (AST)** menggunakan Syntax-Directed Translation.
+2. Melakukan **dekorasi AST** dengan anotasi tipe data, tab index, block index, dan lexical level pada setiap node.
+3. Membangun dan mengelola **symbol table** (TAB, BTAB, ATAB) selama proses analisis.
+4. Melakukan **type checking** — memastikan operator dan operand kompatibel, termasuk aturan assignment-compatible.
+5. Melakukan **scope resolution** — lookup identifier dari scope terdalam ke terluar menggunakan display stack.
+6. Mendeteksi **semantic error** dengan pesan yang informatif.
+7. Menyimpan output decorated AST dan symbol table ke file `test/milestone-3/output-<nama-file>.txt`.
+
+#### Cakupan Semantic Analysis Milestone 3
+
+- Deklarasi: `const`, `type` (subrange, enumerated, record, array), `var`, `procedure`, `function`
+- Parameter formal procedure/function (pass by value), scope lokal parameter
+- Statement: assignment, if, while, for, repeat-until, case, procedure/function call
+- Ekspresi: binary operator, unary operator, array access (termasuk array of array), field access
+- Predefined identifier: `integer`, `real`, `char`, `boolean`, `string`, `true`, `false`, `writeln`, `readln`, `write`, `read`
 
 ## Requirements
 
@@ -83,21 +103,26 @@ make run
 
 1. **Program akan menampilkan:**
    ```
-   ARION COMPILER
-   Masukkan path file input (.txt): 
+   ╔══════════════════════════════════════════════════════════╗
+   ║                      ARION COMPILER                      ║
+   ║  Lexical Analyzer + Syntax Analyzer + Semantic Analyzer  ║
+   ╚══════════════════════════════════════════════════════════╝
+
+   Masukkan path file input (.txt):
    ```
 
 2. **Masukkan path file input**, contoh:
    ```
-   test/milestone-2/tc1.txt
+   test/milestone-3/tc1.txt
    ```
 
 3. **Tekan Enter** dan program akan:
    - Membaca file input
    - Menampilkan **hasil lexical analysis di terminal**
    - Menampilkan **parse tree di terminal**
-   - Menyimpan **hanya parse tree** ke file `test/milestone-2/output-<nama-file>.txt`
-   - **Notes: Pada Milestone 2, lexical analysis tidak disimpan ke file output**
+   - Menampilkan **decorated AST dan symbol table di terminal**
+   - Menyimpan **hanya output semantic** ke file `test/milestone-3/output-<nama-file>.txt`
+   - **Notes: Lexical analysis dan parse tree tidak disimpan ke file output**
 
 ## Testing Milestone 2
 
@@ -109,29 +134,36 @@ Ringkasan:
 - **Kasus valid (parse tree terbentuk):** `tc1` s.d. `tc6`
 - **Kasus error sintaks (pesan error):** `tc7` s.d. `tc12`
 
+## Testing Milestone 3
 
-## Pembagian Tugas (Milestone 2)
+Folder test yang tersedia:
+- `test/milestone-3/tc1.txt` sampai `test/milestone-3/tc14.txt`
+- `test/milestone-3/error1.txt` sampai `test/milestone-3/error10.txt`
+- Referensi output: `test/milestone-3/output-tc1.txt` sampai `output-tc14.txt` dan `output-error1.txt` sampai `output-error10.txt`
+
+Ringkasan:
+- **Kasus valid (decorated AST terbentuk):** `tc1` s.d. `tc14`
+- **Kasus error semantik (pesan error):** `error1` s.d. `error10`
+
+
+## Pembagian Tugas (Milestone 3)
 
 **Gabriella Botimada Lubis - 13524006**
-- Implementasi Kode Parser
+- Implementasi Semantic Analyser
 - Testing
 - Bug Fixing
 - Penyusunan Laporan
 
-
 \
-**Stefani Angeline Oroh - 13524064** 
-- Implementasi Kode Parser
+**Stefani Angeline Oroh - 13524064**
+- Implementasi Semantic Analyser
 - Testing
 - Bug Fixing
 - Penyusunan Laporan
 
 \
 **Reva Natania Sitohang - 13524098**
-- Implementasi Kode Parser
+- Implementasi Semantic Analyser
 - Testing
 - Bug Fixing
 - Penyusunan Laporan
-
-
-
