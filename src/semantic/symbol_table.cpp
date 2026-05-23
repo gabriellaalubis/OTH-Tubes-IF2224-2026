@@ -182,10 +182,10 @@ int SymbolTable::lookup(const std::string& name) const {
     std::string lower = name;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
-    // Telusuri setiap level dari terdalam ke terluar
+    // Setiap level ditelusurin
     for (int lv = currentLevel(); lv >= 0; --lv) {
         int blockIdx = display_[lv];
-        // ikuti linked list dalam blok ini
+        // Mengikuti linked list yang ada di dalam blok
         int idx = btab_[blockIdx].last;
         while (idx > 0) {
             std::string entryName = tab_[idx].name;
@@ -196,7 +196,6 @@ int SymbolTable::lookup(const std::string& name) const {
         }
     }
 
-    // Cek predefined (0..TAB_USER_START-1) — linear scan
     for (int i = 0; i < TAB_USER_START; ++i) {
         std::string entryName = tab_[i].name;
         std::transform(entryName.begin(), entryName.end(),
@@ -204,7 +203,7 @@ int SymbolTable::lookup(const std::string& name) const {
         if (!entryName.empty() && entryName == lower) return i;
     }
 
-    return -1; // tidak ditemukan
+    return -1; 
 }
 
 
