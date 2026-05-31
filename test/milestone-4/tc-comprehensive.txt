@@ -1,0 +1,32 @@
+program CoverAll;
+var
+  a : integer;
+  b : integer;
+  result : integer;
+  i : integer;
+  flag : boolean;
+  check : integer;
+begin
+  a := 10;
+  b := 3;
+  result := a * b;
+  result := result + a;
+  result := result - b;
+  result := result div b;
+  result := result mod b;
+  writeln(result);
+  flag := (a > b) and (result >= 0);
+  if flag then
+    check := a - b
+  else
+    check := b - a;
+  if not flag then
+    check := 0;
+  writeln(check);
+  i := 1;
+  repeat
+    writeln(i);
+    i := i + 1
+  until i > 3;
+  writeln(i)
+end.

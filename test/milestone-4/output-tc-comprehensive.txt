@@ -1,0 +1,196 @@
+
+INTERMEDIATE CODE (STACK MACHINE)
+   0  INT   0      9
+   1  LIT   0     10
+   2  STO   0      3
+   3  LIT   0      3
+   4  STO   0      4
+   5  LOD   0      3
+   6  LOD   0      4
+   7  OPR   0      4
+   8  STO   0      5
+   9  LOD   0      5
+  10  LOD   0      3
+  11  OPR   0      2
+  12  STO   0      5
+  13  LOD   0      5
+  14  LOD   0      4
+  15  OPR   0      3
+  16  STO   0      5
+  17  LOD   0      5
+  18  LOD   0      4
+  19  OPR   0      5
+  20  STO   0      5
+  21  LOD   0      5
+  22  LOD   0      4
+  23  OPR   0      6
+  24  STO   0      5
+  25  LOD   0      5
+  26  OPR   0     14
+  27  LOD   0      3
+  28  LOD   0      4
+  29  OPR   0     11
+  30  LOD   0      5
+  31  LIT   0      0
+  32  OPR   0     10
+  33  OPR   0      4
+  34  STO   0      7
+  35  LOD   0      7
+  36  JPC   0     42
+  37  LOD   0      3
+  38  LOD   0      4
+  39  OPR   0      3
+  40  STO   0      8
+  41  JMP   0     46
+  42  LOD   0      4
+  43  LOD   0      3
+  44  OPR   0      3
+  45  STO   0      8
+  46  LOD   0      7
+  47  OPR   0      1
+  48  LIT   0      1
+  49  OPR   0      2
+  50  JPC   0     53
+  51  LIT   0      0
+  52  STO   0      8
+  53  LOD   0      8
+  54  OPR   0     14
+  55  LIT   0      1
+  56  STO   0      6
+  57  LOD   0      6
+  58  OPR   0     14
+  59  LOD   0      6
+  60  LIT   0      1
+  61  OPR   0      2
+  62  STO   0      6
+  63  LOD   0      6
+  64  LIT   0      3
+  65  OPR   0     11
+  66  JPC   0     57
+  67  LOD   0      6
+  68  OPR   0     14
+  69  RET   0      0
+
+
+╔══════════════════════════════════════════════════╗
+║           DECORATED ABSTRACT SYNTAX TREE         ║
+╚══════════════════════════════════════════════════╝
+└── Program('CoverAll')  →  type:Void tab:33 btab:1 lev:0 
+    ├── Block('declarations')
+    │   ├── VarDecl('a')  →  type:Integer tab:34 lev:0 
+    │   ├── VarDecl('b')  →  type:Integer tab:35 lev:0 
+    │   ├── VarDecl('result')  →  type:Integer tab:36 lev:0 
+    │   ├── VarDecl('i')  →  type:Integer tab:37 lev:0 
+    │   ├── VarDecl('flag')  →  type:Boolean tab:38 lev:0 
+    │   └── VarDecl('check')  →  type:Integer tab:39 lev:0 
+    └── Block  →  btab:1 lev:1 
+        ├── Assign('a' := 10)  →  type:Void 
+        │   ├── VarRef('a')  →  type:Integer tab:34 lev:0 
+        │   └── ConstInt('10')  →  type:Integer 
+        ├── Assign('b' := 3)  →  type:Void 
+        │   ├── VarRef('b')  →  type:Integer tab:35 lev:0 
+        │   └── ConstInt('3')  →  type:Integer 
+        ├── Assign('result' := 'a'*'b')  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │   └── BinOp('*')  →  type:Integer 
+        │       ├── VarRef('a')  →  type:Integer tab:34 lev:0 
+        │       └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        ├── Assign('result' := 'result'+'a')  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │   └── BinOp('+')  →  type:Integer 
+        │       ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │       └── VarRef('a')  →  type:Integer tab:34 lev:0 
+        ├── Assign('result' := 'result'-'b')  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │   └── BinOp('-')  →  type:Integer 
+        │       ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │       └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        ├── Assign('result' := 'result'div'b')  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │   └── BinOp('div')  →  type:Integer 
+        │       ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │       └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        ├── Assign('result' := 'result'mod'b')  →  type:Void 
+        │   ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │   └── BinOp('mod')  →  type:Integer 
+        │       ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │       └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('result')  →  type:Integer tab:36 lev:0 
+        ├── Assign('flag' := 'a'>'b'and'result'>=0)  →  type:Void 
+        │   ├── VarRef('flag')  →  type:Boolean tab:38 lev:0 
+        │   └── BinOp('and')  →  type:Boolean 
+        │       ├── BinOp('>')  →  type:Boolean 
+        │       │   ├── VarRef('a')  →  type:Integer tab:34 lev:0 
+        │       │   └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        │       └── BinOp('>=')  →  type:Boolean 
+        │           ├── VarRef('result')  →  type:Integer tab:36 lev:0 
+        │           └── ConstInt('0')  →  type:Integer 
+        ├── IfStmt  →  type:Void 
+        │   ├── VarRef('flag')  →  type:Boolean tab:38 lev:0 
+        │   ├── Assign('check' := 'a'-'b')  →  type:Void 
+        │   │   ├── VarRef('check')  →  type:Integer tab:39 lev:0 
+        │   │   └── BinOp('-')  →  type:Integer 
+        │   │       ├── VarRef('a')  →  type:Integer tab:34 lev:0 
+        │   │       └── VarRef('b')  →  type:Integer tab:35 lev:0 
+        │   └── Assign('check' := 'b'-'a')  →  type:Void 
+        │       ├── VarRef('check')  →  type:Integer tab:39 lev:0 
+        │       └── BinOp('-')  →  type:Integer 
+        │           ├── VarRef('b')  →  type:Integer tab:35 lev:0 
+        │           └── VarRef('a')  →  type:Integer tab:34 lev:0 
+        ├── IfStmt  →  type:Void 
+        │   ├── UnOp('not')  →  type:Boolean 
+        │   │   └── VarRef('flag')  →  type:Boolean tab:38 lev:0 
+        │   └── Assign('check' := 0)  →  type:Void 
+        │       ├── VarRef('check')  →  type:Integer tab:39 lev:0 
+        │       └── ConstInt('0')  →  type:Integer 
+        ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   └── VarRef('check')  →  type:Integer tab:39 lev:0 
+        ├── Assign('i' := 1)  →  type:Void 
+        │   ├── VarRef('i')  →  type:Integer tab:37 lev:0 
+        │   └── ConstInt('1')  →  type:Integer 
+        ├── RepeatStmt  →  type:Void 
+        │   ├── writeln(...)  →  type:Void tab:8 lev:0 
+        │   │   └── VarRef('i')  →  type:Integer tab:37 lev:0 
+        │   ├── Assign('i' := 'i'+1)  →  type:Void 
+        │   │   ├── VarRef('i')  →  type:Integer tab:37 lev:0 
+        │   │   └── BinOp('+')  →  type:Integer 
+        │   │       ├── VarRef('i')  →  type:Integer tab:37 lev:0 
+        │   │       └── ConstInt('1')  →  type:Integer 
+        │   └── BinOp('>')  →  type:Boolean 
+        │       ├── VarRef('i')  →  type:Integer tab:37 lev:0 
+        │       └── ConstInt('3')  →  type:Integer 
+        └── writeln(...)  →  type:Void tab:8 lev:0 
+            └── VarRef('i')  →  type:Integer tab:37 lev:0 
+
+===== TAB (Identifier Table) =====
+idx  name            obj         type        ref   nrm   lev   adr     link  
+-----------------------------------------------------------------------------
+0                    variable    NoType      0     1     0     0       0     
+1    integer         type        Integer     0     1     0     0       0     
+2    real            type        Real        0     1     0     0       0     
+3    char            type        Char        0     1     0     0       0     
+4    boolean         type        Boolean     0     1     0     0       0     
+5    string          type        String      0     1     0     0       0     
+6    true            constant    Boolean     0     1     0     1       0     
+7    false           constant    Boolean     0     1     0     0       0     
+8    writeln         procedure   Void        0     1     0     0       0     
+9    readln          procedure   Void        0     1     0     0       0     
+10   write           procedure   Void        0     1     0     0       0     
+11   read            procedure   Void        0     1     0     0       0     
+33   CoverAll        program     Void        0     1     0     0       0     
+34   a               variable    Integer     0     1     0     0       33    
+35   b               variable    Integer     0     1     0     1       34    
+36   result          variable    Integer     0     1     0     2       35    
+37   i               variable    Integer     0     1     0     3       36    
+38   flag            variable    Boolean     0     1     0     4       37    
+39   check           variable    Integer     0     1     0     5       38    
+
+===== BTAB (Block Table) =====
+idx  last    lpar    psze    vsze    
+-------------------------------------
+0    39      0       0       6       
+1    0       0       0       0       
+
+===== ATAB (Array Table) =====
+  (kosong)

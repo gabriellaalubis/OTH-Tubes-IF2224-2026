@@ -8,7 +8,8 @@ SRCS = src/main.cpp \
 	   src/parser/parser.cpp \
 	   src/semantic/semantic.cpp \
 	   src/semantic/ast.cpp \
-	   src/semantic/symbol_table.cpp
+	   src/semantic/symbol_table.cpp \
+	   src/codegenerator/codegen.cpp
 
 TARGET = arion
 
