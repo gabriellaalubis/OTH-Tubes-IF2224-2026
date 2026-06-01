@@ -1,0 +1,30 @@
+
+INTERMEDIATE CODE (STACK MACHINE)
+   0  INT   0      4
+   1  JMP   0      8
+   2  INT   0      4
+   3  LOD   1      3
+   4  LOD   0      3
+   5  OPR   0      2
+   6  STO   1      3
+   7  RET   0      0
+   8  LIT   0      0
+   9  STO   0      3
+  10  LIT   0      0
+  11  LIT   0      0
+  12  LIT   0      0
+  13  LIT   0      5
+  14  CAL   0      2
+  15  LIT   0      0
+  16  LIT   0      0
+  17  LIT   0      0
+  18  LIT   0     10
+  19  CAL   0      2
+  20  LIT   0      0
+  21  LIT   0      0
+  22  LIT   0      0
+  23  LIT   0      3
+  24  CAL   0      2
+  25  LOD   0      3
+  26  OPR   0     14
+  27  RET   0      0

@@ -1,0 +1,10 @@
+program TestDivByZero;
+var
+  a : integer;
+  b : integer;
+begin
+  a := 10;
+  b := 0;
+  a := a div b;
+  writeln(a);
+end.

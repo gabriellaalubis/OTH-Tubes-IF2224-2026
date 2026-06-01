@@ -1,0 +1,19 @@
+program TestArith;
+var
+  a : integer;
+  b : integer;
+  c : integer;
+begin
+  a := 10;
+  b := 3;
+  c := a + b;
+  writeln(c);
+  c := a - b;
+  writeln(c);
+  c := a * b;
+  writeln(c);
+  c := a div b;
+  writeln(c);
+  c := a mod b;
+  writeln(c)
+end.

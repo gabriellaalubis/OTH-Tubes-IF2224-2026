@@ -1,0 +1,25 @@
+
+INTERMEDIATE CODE (STACK MACHINE)
+   0  INT   0      4
+   1  JMP   0     12
+   2  INT   0      4
+   3  LIT   0      0
+   4  LIT   0      0
+   5  LIT   0      0
+   6  LOD   0      3
+   7  LIT   0      1
+   8  OPR   0      2
+   9  CAL   1      2
+  10  STO   0      0
+  11  RET   0      1
+  12  LIT   0      0
+  13  LIT   0      0
+  14  LIT   0      0
+  15  LIT   0      0
+  16  CAL   0      2
+  17  STO   0      3
+  18  LOD   0      3
+  19  OPR   0     14
+  20  RET   0      0
+
+[INTERPRETER ERROR] StackOverflowError: Kedalaman pemanggilan fungsi melebihi batas maksimum (1000 frame). Kemungkinan infinite recursion.

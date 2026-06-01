@@ -1,0 +1,16 @@
+
+INTERMEDIATE CODE (STACK MACHINE)
+   0  INT   0      5
+   1  LIT   0     10
+   2  STO   0      3
+   3  LIT   0      0
+   4  STO   0      4
+   5  LOD   0      3
+   6  LOD   0      4
+   7  OPR   0      6
+   8  STO   0      3
+   9  LOD   0      3
+  10  OPR   0     14
+  11  RET   0      0
+
+[INTERPRETER ERROR] Modulo dengan nol pada PC=7

@@ -1,0 +1,13 @@
+program TestWriteString;
+var
+  x : integer;
+  y : integer;
+begin
+  x := 42;
+  y := 100;
+  writeln('Hello World');
+  writeln('x = ', x);
+  writeln('y = ', y);
+  writeln('Sum = ', x + y);
+  writeln('Done');
+end.

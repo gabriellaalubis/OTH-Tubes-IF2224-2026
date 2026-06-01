@@ -1,0 +1,19 @@
+program TestRecord;
+type
+  Point == record
+    x: integer;
+    y: integer
+  end;
+var
+  p : Point;
+  q : Point;
+begin
+  p.x := 3;
+  p.y := 4;
+  q.x := p.x + 1;
+  q.y := p.y + 1;
+  writeln(p.x);
+  writeln(p.y);
+  writeln(q.x);
+  writeln(q.y)
+end.

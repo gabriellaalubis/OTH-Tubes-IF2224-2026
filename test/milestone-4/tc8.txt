@@ -1,0 +1,22 @@
+program TestCase;
+var
+  x : integer;
+  result : integer;
+begin
+  x := 3;
+  result := 0;
+  case x of
+    1: result := 100;
+    2: result := 200;
+    3: result := 300;
+    4: result := 400
+  end;
+  writeln(result);
+  x := 99;
+  result := 0;
+  case x of
+    1: result := 100;
+    2: result := 200
+  end;
+  writeln(result)
+end.

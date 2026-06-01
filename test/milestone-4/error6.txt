@@ -1,0 +1,8 @@
+program TestMulOverflow;
+var
+  a : integer;
+begin
+  a := 2147483647;
+  a := a * 2;
+  writeln(a);
+end.

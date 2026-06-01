@@ -1,0 +1,14 @@
+program TestProc;
+var
+  total : integer;
+procedure addTo(val: integer);
+begin
+  total := total + val
+end;
+begin
+  total := 0;
+  addTo(5);
+  addTo(10);
+  addTo(3);
+  writeln(total)
+end.

@@ -1,0 +1,18 @@
+program TestMultiProc;
+var
+  total : integer;
+procedure addVal(n: integer);
+begin
+  total := total + n;
+end;
+procedure subVal(n: integer);
+begin
+  total := total - n;
+end;
+begin
+  total := 100;
+  addVal(20);
+  addVal(30);
+  subVal(10);
+  writeln(total);
+end.

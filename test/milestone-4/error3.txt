@@ -1,0 +1,11 @@
+program TestStackOverflow;
+var
+  n : integer;
+function inf(x : integer) : integer;
+begin
+  inf := inf(x + 1);
+end;
+begin
+  n := inf(0);
+  writeln(n);
+end.

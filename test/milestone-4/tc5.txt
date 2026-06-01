@@ -1,0 +1,13 @@
+program TestRepeat;
+var
+  n : integer;
+  product : integer;
+begin
+  n := 1;
+  product := 1;
+  repeat
+    product := product * n;
+    n := n + 1
+  until n > 5;
+  writeln(product)
+end.

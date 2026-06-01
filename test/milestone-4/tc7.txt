@@ -1,0 +1,17 @@
+program TestFunc;
+var
+  r : integer;
+function square(n: integer): integer;
+begin
+  square := n * n
+end;
+function add(a: integer; b: integer): integer;
+begin
+  add := a + b
+end;
+begin
+  r := square(6);
+  writeln(r);
+  r := add(square(3), square(4));
+  writeln(r)
+end.

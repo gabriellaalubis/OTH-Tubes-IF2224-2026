@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
         interp.printOutput(std::cout);
         printSeparator();
         std::cout << "  Status          : Eksekusi selesai\n";
-        std::cout << "\n\n  Output          : " << outputFile << "\n";
+        std::cout << "\n\nOutput          : " << outputFile << "\n\n";
 
     } catch (const SyntaxError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
@@ -126,10 +126,12 @@ int main(int argc, char* argv[]) {
     } catch (const CodeGenError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
         { std::ofstream out(outputFile); out << e.what() << "\n"; }
+        std::cerr << "\n\nOutput          : " << outputFile << "\n\n";
         return 1;
     } catch (const InterpreterError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
         { std::ofstream out(outputFile, std::ios::app); out << "\n" << e.what() << "\n"; }
+        std::cerr << "\n\nOutput          : " << outputFile << "\n\n";
         return 1;
     } catch (const std::exception& e) {
         std::cerr << "[ERROR]: " << e.what() << "\n";

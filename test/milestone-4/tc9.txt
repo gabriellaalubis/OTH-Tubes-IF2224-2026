@@ -1,0 +1,16 @@
+program TestConst;
+const
+  MAX == 100;
+  MIN == 1;
+var
+  x : integer;
+  y : integer;
+begin
+  x := MAX;
+  y := MIN;
+  writeln(x);
+  writeln(y);
+  writeln(x + y);
+  writeln(x - y);
+  writeln(x div 10)
+end.

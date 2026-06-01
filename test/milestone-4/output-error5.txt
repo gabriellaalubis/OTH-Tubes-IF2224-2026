@@ -1,0 +1,14 @@
+
+INTERMEDIATE CODE (STACK MACHINE)
+   0  INT   0      4
+   1  LIT   0  -2147483648
+   2  STO   0      3
+   3  LOD   0      3
+   4  LIT   0      1
+   5  OPR   0      3
+   6  STO   0      3
+   7  LOD   0      3
+   8  OPR   0     14
+   9  RET   0      0
+
+[INTERPRETER ERROR] UnderflowError: Operasi SUB menghasilkan nilai -2147483649 di bawah batas minimum integer (-2147483648)
