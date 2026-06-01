@@ -588,6 +588,8 @@ ASTPtr SemanticAnalyser::buildForStmt(const NodePtr& n) {
             node->children.push_back(buildExpression(ch));
         else if (ch->label == "<compound-statement>")
             node->children.push_back(buildCompound(ch));
+        else if (ch->label == "<statement>")
+            node->children.push_back(buildStatement(ch));
     }
     node->name = hasDown ? "downto" : "to";
     return node;
