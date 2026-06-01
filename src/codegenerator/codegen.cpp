@@ -409,8 +409,10 @@ void CodeGenerator::genProcCall(const ASTPtr& node) {
     std::string name = node->name;
     if (name == "writeln") {
         if (node->children.empty()) {
-            emit(OpCode::LIT, 0, 0);   
-            emit(OpCode::OPR, 0, 14);  
+            int idx = (int)stringTable_.size();
+            stringTable_.push_back("");
+            emit(OpCode::LIT, 1, idx);
+            emit(OpCode::OPR, 0, 14);
         } else {
             for (size_t i = 0; i < node->children.size(); ++i) {
                 genExpr(node->children[i]);
@@ -563,7 +565,16 @@ void CodeGenerator::genVarRef(const ASTPtr& node) {
 
     const TabEntry& entry = symtab_.tab()[tabIdx];
     if (entry.obj == ObjClass::CONSTANT) {
-        emit(OpCode::LIT, 0, entry.adr); 
+        emit(OpCode::LIT, 0, entry.adr);
+        return;
+    }
+
+    if (entry.obj == ObjClass::FUNCTION) {
+        emit(OpCode::LIT, 0, 0);
+        emit(OpCode::LIT, 0, 0);
+        emit(OpCode::LIT, 0, 0);
+        int lev = levelDiff(tabIdx);
+        emit(OpCode::CAL, lev, entry.adr);
         return;
     }
 

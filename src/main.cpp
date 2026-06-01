@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     std::cout << "\n";
     std::cout << "╔══════════════════════════════════════════════════════════╗\n";
     std::cout << "║                    ARION INTERPRETER                     ║\n";
-    std::cout << "║  Lexical + Syntax + Semantic + Intermediate Code Gen     ║\n";
+    std::cout << "║  Lexical + Syntax + Semantic + Code Gen + Execution      ║\n";
     std::cout << "╚══════════════════════════════════════════════════════════╝\n";
     std::cout << "\n";
     std::cout << "Masukkan path file input (.txt): ";
@@ -53,14 +53,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    fs::path outDirSemantic = "test/milestone-3";
-    fs::path outDirCodegen  = "test/milestone-4";
-    fs::create_directories(outDirSemantic);
-    fs::create_directories(outDirCodegen);
+    fs::path outDir = "test/milestone-4";
+    fs::create_directories(outDir);
 
     std::string stem = fs::path(inputPath).stem().string();
-    fs::path outputSemantic = outDirSemantic / ("output-" + stem + ".txt");
-    fs::path outputCodegen  = outDirCodegen  / ("output-" + stem + ".txt");
+    fs::path outputFile = outDir / ("output-" + stem + ".txt");
 
     try {
         printHeader("LEXICAL ANALYSIS");
@@ -91,13 +88,8 @@ int main(int argc, char* argv[]) {
         SemanticAnalyser semantic;
         ASTPtr ast = semantic.analyse(tree);
         semantic.printResults(std::cout);
-        {
-            std::ofstream outSem(outputSemantic);
-            semantic.printResults(outSem);
-        }
         printSeparator();
         std::cout << "  Status      : Semantic analysis selesai\n";
-        std::cout << "  Output      : " << outputSemantic << "\n";
         if (!semantic.getWarnings().empty()) {
             std::cout << "\n  [WARNINGS]\n";
             for (auto& w : semantic.getWarnings())
@@ -109,14 +101,13 @@ int main(int argc, char* argv[]) {
         codegen.generate();
         codegen.printCode(std::cout);
         {
-            std::ofstream outCG(outputCodegen);
+            std::ofstream outCG(outputFile);
             codegen.printCode(outCG);
         }
         printSeparator();
         std::cout << "  Total instruksi : "
                   << codegen.getInstructions().size() << " instruksi\n";
         std::cout << "  Status          : Code generation selesai\n";
-        std::cout << "  Output          : " << outputCodegen << "\n";
 
         printHeader("EXECUTION (INTERPRETER)");
         Interpreter interp(codegen.getInstructions(), semantic.getSymbolTable(), codegen.getStringTable());
@@ -124,19 +115,21 @@ int main(int argc, char* argv[]) {
         interp.printOutput(std::cout);
         printSeparator();
         std::cout << "  Status          : Eksekusi selesai\n";
+        std::cout << "\n\n  Output          : " << outputFile << "\n";
 
     } catch (const SyntaxError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
         return 1;
     } catch (const SemanticError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
-        { std::ofstream outSem(outputSemantic); outSem << e.what() << "\n"; }
         return 1;
     } catch (const CodeGenError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
+        { std::ofstream out(outputFile); out << e.what() << "\n"; }
         return 1;
     } catch (const InterpreterError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
+        { std::ofstream out(outputFile, std::ios::app); out << "\n" << e.what() << "\n"; }
         return 1;
     } catch (const std::exception& e) {
         std::cerr << "[ERROR]: " << e.what() << "\n";
