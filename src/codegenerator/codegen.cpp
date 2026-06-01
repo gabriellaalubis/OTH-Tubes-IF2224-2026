@@ -209,6 +209,10 @@ void CodeGenerator::genStatement(const ASTPtr& node) {
             genProcCall(node);
             break;
 
+        case ASTNodeKind::CASE_STMT:
+            genCaseStmt(node);
+            break;
+
         case ASTNodeKind::COMPOUND:
         case ASTNodeKind::BLOCK:
             genCompound(node);
@@ -234,9 +238,24 @@ void CodeGenerator::genAssign(const ASTPtr& node) {
         int tabIdx = target->tabIndex;
         if (tabIdx < 0)
             throw CodeGenError("genAssign: tabIndex variabel '" + target->name + "' tidak valid.");
-        int addr  = varAddress(tabIdx);
-        int lev   = levelDiff(tabIdx);
-        emit(OpCode::STO, lev, addr);
+        const TabEntry& entry = symtab_.tab()[tabIdx];
+        if (entry.obj == ObjClass::FUNCTION) {
+            emit(OpCode::STO, 0, 0);
+        } else {
+            int addr = varAddress(tabIdx);
+            int lev  = levelDiff(tabIdx);
+            emit(OpCode::STO, lev, addr);
+        }
+    } else if (target->kind == ASTNodeKind::FIELD_ACCESS) {
+        if (!target->children.empty() &&
+            target->children[0]->kind == ASTNodeKind::VAR_REF) {
+            int recTabIdx   = target->children[0]->tabIndex;
+            int fieldTabIdx = target->tabIndex;
+            int baseAddr = varAddress(recTabIdx);
+            int fieldOff = (fieldTabIdx >= 0) ? symtab_.tab()[fieldTabIdx].adr : 0;
+            int lev = levelDiff(recTabIdx);
+            emit(OpCode::STO, lev, baseAddr + fieldOff);
+        }
     } else if (target->kind == ASTNodeKind::ARRAY_ACCESS) {
         if (!target->children.empty() &&
             target->children[0]->kind == ASTNodeKind::VAR_REF) {
@@ -351,6 +370,41 @@ void CodeGenerator::genRepeatStmt(const ASTPtr& node) {
     emit(OpCode::JPC, 0, loopStart);
 }
 
+void CodeGenerator::genCaseStmt(const ASTPtr& node) {
+    if (node->children.size() < 2)
+        throw CodeGenError("genCaseStmt: CASE_STMT butuh selector dan blok.");
+
+    const ASTPtr& selector = node->children[0];
+
+    std::vector<int> jmpEndIdxs;
+
+    const ASTPtr* caseBlock = &node->children[1];
+    while (caseBlock && *caseBlock &&
+           (*caseBlock)->kind == ASTNodeKind::CASE_BLOCK) {
+        const ASTPtr& blk = *caseBlock;
+
+        genExpr(selector);
+        genExpr(blk->children[0]);
+        emit(OpCode::OPR, 0, 7);
+        int jpcIdx = emit(OpCode::JPC, 0, 0);
+
+        if (blk->children.size() >= 2)
+            genStatement(blk->children[1]);
+
+        jmpEndIdxs.push_back(emit(OpCode::JMP, 0, 0));
+        patch(jpcIdx, nextLine());
+
+        if (blk->children.size() >= 3)
+            caseBlock = &blk->children[2];
+        else
+            break;
+    }
+
+    int endAddr = nextLine();
+    for (int idx : jmpEndIdxs)
+        patch(idx, endAddr);
+}
+
 void CodeGenerator::genProcCall(const ASTPtr& node) {
     std::string name = node->name;
     if (name == "writeln") {
@@ -380,6 +434,10 @@ void CodeGenerator::genProcCall(const ASTPtr& node) {
     if (name == "readln" || name == "read") {
         return;
     }
+
+    emit(OpCode::LIT, 0, 0);
+    emit(OpCode::LIT, 0, 0);
+    emit(OpCode::LIT, 0, 0);
 
     for (const auto& arg : node->children) {
         genExpr(arg);
@@ -429,6 +487,18 @@ void CodeGenerator::genExpr(const ASTPtr& node) {
                 int addr   = varAddress(tabIdx);
                 int lev    = levelDiff(tabIdx);
                 emit(OpCode::LOD, lev, addr);
+            }
+            break;
+
+        case ASTNodeKind::FIELD_ACCESS:
+            if (!node->children.empty() &&
+                node->children[0]->kind == ASTNodeKind::VAR_REF) {
+                int recTabIdx   = node->children[0]->tabIndex;
+                int fieldTabIdx = node->tabIndex;
+                int baseAddr = varAddress(recTabIdx);
+                int fieldOff = (fieldTabIdx >= 0) ? symtab_.tab()[fieldTabIdx].adr : 0;
+                int lev = levelDiff(recTabIdx);
+                emit(OpCode::LOD, lev, baseAddr + fieldOff);
             }
             break;
 
@@ -538,7 +608,9 @@ void CodeGenerator::genLiteral(const ASTPtr& node) {
         }
 
         case ASTNodeKind::CONST_STRING: {
-            emit(OpCode::LIT, 0, 0);
+            int idx = (int)stringTable_.size();
+            stringTable_.push_back(node->name);
+            emit(OpCode::LIT, 1, idx);
             break;
         }
 
@@ -548,6 +620,10 @@ void CodeGenerator::genLiteral(const ASTPtr& node) {
 }
 
 void CodeGenerator::genFuncCall(const ASTPtr& node) {
+    emit(OpCode::LIT, 0, 0);
+    emit(OpCode::LIT, 0, 0);
+    emit(OpCode::LIT, 0, 0);
+
     for (const auto& arg : node->children) {
         genExpr(arg);
     }
@@ -589,5 +665,27 @@ void CodeGenerator::genProcDecl(const ASTPtr& node) {
 
 
 void CodeGenerator::genFuncDecl(const ASTPtr& node) {
-    genProcDecl(node); 
+    int tabIdx = node->tabIndex;
+    if (tabIdx < 0)
+        throw CodeGenError("genFuncDecl: tabIndex fungsi '" + node->name + "' tidak valid.");
+
+    int funcStart = nextLine();
+    const_cast<SymbolTable&>(symtab_).tab()[tabIdx].adr = funcStart;
+    curLev_++;
+
+    int btabIdx = node->blockIndex;
+    if (btabIdx < 0) btabIdx = 1;
+
+    int fsize = frameSize(btabIdx);
+    emit(OpCode::INT, 0, fsize);
+
+    for (const auto& child : node->children) {
+        if (child->kind == ASTNodeKind::BLOCK ||
+            child->kind == ASTNodeKind::COMPOUND) {
+            genCompound(child);
+        }
+    }
+
+    emit(OpCode::RET, 0, 1);
+    curLev_--;
 }

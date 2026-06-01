@@ -41,12 +41,14 @@ public:
     CodeGenerator(const ASTPtr& ast, const SymbolTable& symtab);
     void generate();
     const std::vector<Instruction>& getInstructions() const { return code_; }
+    const std::vector<std::string>& getStringTable() const { return stringTable_; }
     void printCode(std::ostream& out) const;
 
 private:
     const ASTPtr& ast_;     
     const SymbolTable& symtab_;  
     std::vector<Instruction> code_; 
+    std::vector<std::string> stringTable_;
     int curLev_; 
 
     int  emit(OpCode op, int level, int operand);
@@ -63,6 +65,7 @@ private:
     void genWhileStmt (const ASTPtr& node);
     void genForStmt(const ASTPtr& node);
     void genRepeatStmt(const ASTPtr& node);
+    void genCaseStmt(const ASTPtr& node);
     void genProcCall(const ASTPtr& node);
     void genExpr(const ASTPtr& node);
     void genBinOp(const ASTPtr& node);
@@ -75,4 +78,4 @@ private:
     int  opToOprNum(const std::string& op, DataType leftType) const;
 };
 
-#endif 
+#endif

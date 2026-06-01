@@ -2,6 +2,7 @@
 #include "parser/parser.hpp"
 #include "semantic/semantic.hpp"
 #include "codegenerator/codegen.hpp"
+#include "interpreter/interpreter.hpp"
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -110,14 +111,19 @@ int main(int argc, char* argv[]) {
         {
             std::ofstream outCG(outputCodegen);
             codegen.printCode(outCG);
-            outCG << "\n";
-            semantic.printResults(outCG);
         }
         printSeparator();
         std::cout << "  Total instruksi : "
                   << codegen.getInstructions().size() << " instruksi\n";
         std::cout << "  Status          : Code generation selesai\n";
         std::cout << "  Output          : " << outputCodegen << "\n";
+
+        printHeader("EXECUTION (INTERPRETER)");
+        Interpreter interp(codegen.getInstructions(), semantic.getSymbolTable(), codegen.getStringTable());
+        interp.execute();
+        interp.printOutput(std::cout);
+        printSeparator();
+        std::cout << "  Status          : Eksekusi selesai\n";
 
     } catch (const SyntaxError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
@@ -127,6 +133,9 @@ int main(int argc, char* argv[]) {
         { std::ofstream outSem(outputSemantic); outSem << e.what() << "\n"; }
         return 1;
     } catch (const CodeGenError& e) {
+        std::cerr << "\n*** " << e.what() << "\n";
+        return 1;
+    } catch (const InterpreterError& e) {
         std::cerr << "\n*** " << e.what() << "\n";
         return 1;
     } catch (const std::exception& e) {

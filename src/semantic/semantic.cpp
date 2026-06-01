@@ -979,12 +979,24 @@ void SemanticAnalyser::visitConstDecl(const ASTPtr& n) {
         semanticError("Identifier '" + n->name + "' sudah dideklarasikan dalam scope ini.");
 
     DataType dt = DataType::NOTYPE;
+    int constVal = 0;
     if (!n->children.empty()) {
         auto& val = n->children[0];
         dt = visitExpr(val);
+        if (val->kind == ASTNodeKind::CONST_INT) {
+            try { constVal = std::stoi(val->name); } catch (...) { constVal = 0; }
+        } else if (val->kind == ASTNodeKind::CONST_REAL) {
+            try { constVal = (int)std::stod(val->name); } catch (...) { constVal = 0; }
+        } else if (val->kind == ASTNodeKind::CONST_BOOL) {
+            std::string lower = val->name;
+            for (auto& c : lower) c = (char)tolower((unsigned char)c);
+            constVal = (lower == "true") ? 1 : 0;
+        } else if (val->kind == ASTNodeKind::CONST_CHAR) {
+            constVal = val->name.empty() ? 0 : (int)(unsigned char)val->name[0];
+        }
     }
 
-    int idx = symtab_.addTab(n->name, ObjClass::CONSTANT, dt, 0, 1, 0);
+    int idx = symtab_.addTab(n->name, ObjClass::CONSTANT, dt, 0, 1, constVal);
     symtab_.tab()[idx].initialized = true;
     n->tabIndex  = idx;
     n->lexLevel  = symtab_.currentLevel();
@@ -1152,6 +1164,7 @@ void SemanticAnalyser::visitProcDecl(const ASTPtr& n) {
     // Masuk ke blok baru
     int blockIdx = symtab_.enterBlock();
     n->blockIndex = blockIdx;
+    symtab_.tab()[procIdx].ref = blockIdx;
     n->lexLevel   = symtab_.currentLevel();
 
     for (auto& ch : n->children) {
@@ -1211,6 +1224,7 @@ void SemanticAnalyser::visitFuncDecl(const ASTPtr& n) {
 
     int blockIdx = symtab_.enterBlock();
     n->blockIndex = blockIdx;
+    symtab_.tab()[funcIdx].ref = blockIdx;
     n->lexLevel   = symtab_.currentLevel();
 
     for (auto& ch : n->children) {
