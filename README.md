@@ -2,6 +2,7 @@
 Milestone 1 - Lexical Analysis  
 Milestone 2 - Syntax Analysis (Parse Tree)
 Milestone 3 - Semantic Analysis (Decorated AST)
+Milestone 4 - Intermediate Code Generation & Interpreter
 
 ## Identitas Kelompok
 
@@ -14,10 +15,11 @@ Reva Natania Sitohang - 13524098
 
 ## Deskripsi Program
 
-Arion Compiler adalah program untuk menganalisis kode sumber bahasa Arion dalam tiga tahap:
+Arion Compiler adalah program untuk menganalisis dan mengeksekusi kode sumber bahasa Arion dalam empat tahap:
 1. **Lexical Analysis (Milestone 1)** menggunakan **Deterministic Finite Automata (DFA)** untuk menghasilkan token.
 2. **Syntax Analysis (Milestone 2)** menggunakan **recursive-descent parser** untuk membangun parse tree dan memvalidasi struktur program.
 3. **Semantic Analysis (Milestone 3)** menggunakan **attributed grammar** untuk membangun decorated AST, mengelola symbol table, dan melakukan type & scope checking.
+4. **Intermediate Code Generation & Interpreter (Milestone 4)** mengonversi decorated AST menjadi instruksi stack machine dan mengeksekusinya melalui sebuah virtual machine interpreter.
 
 ### Fitur Utama Milestone 1 (Lexer)
 
@@ -103,17 +105,17 @@ make run
 
 1. **Program akan menampilkan:**
    ```
-   ╔══════════════════════════════════════════════════════════╗
-   ║                      ARION COMPILER                      ║
-   ║  Lexical Analyzer + Syntax Analyzer + Semantic Analyzer  ║
-   ╚══════════════════════════════════════════════════════════╝
+   ╔═══════════════════════════════════════════════════════════════╗
+   ║                       ARION INTERPRETER                       ║
+   ║  Lexical + Syntax + Semantic + Intermediate Code + Execution  ║
+   ╚═══════════════════════════════════════════════════════════════╝
 
    Masukkan path file input (.txt):
    ```
 
 2. **Masukkan path file input**, contoh:
    ```
-   test/milestone-3/tc1.txt
+   test/milestone-4/tc1.txt
    ```
 
 3. **Tekan Enter** dan program akan:
@@ -121,8 +123,11 @@ make run
    - Menampilkan **hasil lexical analysis di terminal**
    - Menampilkan **parse tree di terminal**
    - Menampilkan **decorated AST dan symbol table di terminal**
-   - Menyimpan **hanya output semantic** ke file `test/milestone-3/output-<nama-file>.txt`
-   - **Notes: Lexical analysis dan parse tree tidak disimpan ke file output**
+   - Menampilkan **intermediate code (stack machine) di terminal**
+   - Mengeksekusi program dan menampilkan **output eksekusi di terminal**
+   - Menyimpan **intermediate code** dan **hasil eksekusi** ke file `test/milestone-4/output-<nama-file>.txt`
+   - Jika terjadi error pada code generation atau execution, pesan error juga disimpan ke file output
+   - **Notes: Lexical analysis, parse tree, dan semantic analysis tidak disimpan ke file output**
 
 ## Testing Milestone 2
 
@@ -145,25 +150,41 @@ Ringkasan:
 - **Kasus valid (decorated AST terbentuk):** `tc1` s.d. `tc14`
 - **Kasus error semantik (pesan error):** `error1` s.d. `error10`
 
+## Testing Milestone 4
 
-## Pembagian Tugas (Milestone 3)
+Folder test yang tersedia:
+- `test/milestone-4/tc1.txt` sampai `test/milestone-4/tc13.txt` — kasus valid
+- `test/milestone-4/tc_ms4err1.txt` sampai `test/milestone-4/tc_ms4err6.txt` — kasus error runtime
+- `test/milestone-4/tc-spec.txt` — contoh program dari spesifikasi (halaman 21–29)
+- `test/milestone-4/tc-comprehensive.txt` — kasus komprehensif gabungan fitur
+- Referensi output: `test/milestone-4/output-<nama-file>.txt`
+
+Ringkasan:
+- **Kasus valid (hasil eksekusi ada):** `tc1` s.d. `tc13`
+- **Kasus error interpreter (pesan error):** `error1` s.d. `error6`
+
+
+## Pembagian Tugas (Milestone 4)
 
 **Gabriella Botimada Lubis - 13524006**
-- Implementasi Semantic Analyser
+- Implementasi Intermediate Code Generator
+- Implementasi Interpreter (Stack Machine)
 - Testing
 - Bug Fixing
 - Penyusunan Laporan
 
 \
 **Stefani Angeline Oroh - 13524064**
-- Implementasi Semantic Analyser
+- Implementasi Intermediate Code Generator
+- Implementasi Interpreter (Stack Machine)
 - Testing
 - Bug Fixing
 - Penyusunan Laporan
 
 \
 **Reva Natania Sitohang - 13524098**
-- Implementasi Semantic Analyser
+- Implementasi Intermediate Code Generator
+- Implementasi Interpreter (Stack Machine)
 - Testing
 - Bug Fixing
 - Penyusunan Laporan

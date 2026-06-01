@@ -27,10 +27,10 @@ int main(int argc, char* argv[]) {
     std::string inputPath;
 
     std::cout << "\n";
-    std::cout << "╔══════════════════════════════════════════════════════════╗\n";
-    std::cout << "║                    ARION INTERPRETER                     ║\n";
-    std::cout << "║  Lexical + Syntax + Semantic + Code Gen + Execution      ║\n";
-    std::cout << "╚══════════════════════════════════════════════════════════╝\n";
+    std::cout << "╔═══════════════════════════════════════════════════════════════╗\n";
+    std::cout << "║                       ARION INTERPRETER                       ║\n";
+    std::cout << "║  Lexical + Syntax + Semantic + Intermediate Code + Execution  ║\n";
+    std::cout << "╚═══════════════════════════════════════════════════════════════╝\n";
     std::cout << "\n";
     std::cout << "Masukkan path file input (.txt): ";
     std::getline(std::cin, inputPath);
