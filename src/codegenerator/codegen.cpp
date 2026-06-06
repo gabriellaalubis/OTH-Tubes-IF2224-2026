@@ -151,7 +151,7 @@ void CodeGenerator::genProgram(const ASTPtr& node) {
     // JMP ke body 
     int jmpToBody = -1;
     if (hasSubprog) {
-        jmpToBody = emit(OpCode::JMP, 0, 0); // target di-patch nanti
+        jmpToBody = emit(OpCode::JMP, 0, 0); 
     }
 
     // generate deklarasi subprogram (proc/func)
@@ -168,7 +168,7 @@ void CodeGenerator::genProgram(const ASTPtr& node) {
         patch(jmpToBody, nextLine());
     }
 
-    //generate body program utama
+    // generate body program utama
     if (bodyBlock) {
         genCompound(bodyBlock);
     }
