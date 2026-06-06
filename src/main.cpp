@@ -113,6 +113,11 @@ int main(int argc, char* argv[]) {
         Interpreter interp(codegen.getInstructions(), semantic.getSymbolTable(), codegen.getStringTable());
         interp.execute();
         interp.printOutput(std::cout);
+        {
+            std::ofstream outExec(outputFile, std::ios::app);
+            outExec << "\n\n";
+            interp.printOutput(outExec);
+        }
         printSeparator();
         std::cout << "  Status          : Eksekusi selesai\n";
         std::cout << "\n\nOutput          : " << outputFile << "\n\n";

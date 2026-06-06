@@ -50,3 +50,8 @@ INTERMEDIATE CODE (STACK MACHINE)
   47  LIT   0      0
   48  OPR   0     14
   49  RET   0      0
+
+
+1
+0
+1

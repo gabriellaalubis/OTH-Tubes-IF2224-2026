@@ -22,3 +22,10 @@ INTERMEDIATE CODE (STACK MACHINE)
   19  OPR   0      5
   20  OPR   0     14
   21  RET   0      0
+
+
+100
+1
+101
+99
+10

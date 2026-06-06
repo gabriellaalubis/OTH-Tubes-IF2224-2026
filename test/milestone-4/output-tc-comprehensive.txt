@@ -70,3 +70,11 @@ INTERMEDIATE CODE (STACK MACHINE)
   67  LOD   0      6
   68  OPR   0     14
   69  RET   0      0
+
+
+0
+7
+1
+2
+3
+4

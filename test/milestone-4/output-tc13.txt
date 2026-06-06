@@ -34,3 +34,11 @@ INTERMEDIATE CODE (STACK MACHINE)
   31  STO   0      3
   32  JMP   0     22
   33  RET   0      0
+
+
+55
+5
+4
+3
+2
+1

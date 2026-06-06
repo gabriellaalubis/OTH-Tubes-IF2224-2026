@@ -24,3 +24,10 @@ INTERMEDIATE CODE (STACK MACHINE)
   21  LIT   1      4
   22  OPR   0     14
   23  RET   0      0
+
+
+Hello World
+x = 42
+y = 100
+Sum = 142
+Done
